@@ -1,0 +1,92 @@
+[33mcommit 2e343b12d953effbc1c12ca02862bac6cae29e5f[m[33m ([m[1;36mHEAD -> [m[1;32mcontributor[m[33m)[m
+Author: Monsurat-Onabajo <onabajofunmilayo@gmail.com>
+Date:   Mon Oct 17 14:36:33 2022 -0700
+
+    I created two functions that will generate insights from ordertype, profit and quantity columns
+
+[33mcommit e48bb68eb791613bd2c8ca4d5c82de92b16a0874[m
+Author: Fash <fashoyinolujimit@gmail.com>
+Date:   Mon Oct 3 11:29:09 2022 +0100
+
+    Cleaning function for sales class
+
+[33mcommit a5142041c9020c598bb8b3a141364bb8d50b221a[m[33m ([m[1;32mmain[m[33m)[m
+Author: EMEKA ONWUEPE <PASCALEMY2010@GMAIL.COM>
+Date:   Sun Oct 2 23:11:15 2022 +0100
+
+    Merge pull request #6 from Emeka-Onwuepe/main (#7)
+
+[33mcommit 3d49c3eb77dada7fa482de3e5b58dc8fa9fd647d[m
+Merge: 932ccb3 fac8d74
+Author: EMEKA ONWUEPE <PASCALEMY2010@GMAIL.COM>
+Date:   Sun Oct 2 23:02:13 2022 +0100
+
+    Merge pull request #5 from Emeka-Onwuepe/contributor
+    
+    Merge pull request #4 from Emeka-Onwuepe/main
+
+[33mcommit fac8d742488b1410c4862a6964807af450f80080[m
+Merge: 55d95fa 932ccb3
+Author: EMEKA ONWUEPE <PASCALEMY2010@GMAIL.COM>
+Date:   Sun Oct 2 22:56:31 2022 +0100
+
+    Merge pull request #4 from Emeka-Onwuepe/main
+    
+    Merge pull request #3 from Emeka-Onwuepe/contributor
+
+[33mcommit 932ccb30b7a2c6959aaf91d14514f634c505d35f[m
+Merge: 72e9f53 55d95fa
+Author: EMEKA ONWUEPE <PASCALEMY2010@GMAIL.COM>
+Date:   Sun Oct 2 22:54:34 2022 +0100
+
+    Merge pull request #3 from Emeka-Onwuepe/contributor
+    
+    Merge pull request #2 from Emeka-Onwuepe/main
+
+[33mcommit 55d95faba6892dfe46e6866baba9bb6e37956a69[m
+Merge: 06913b5 72e9f53
+Author: EMEKA ONWUEPE <PASCALEMY2010@GMAIL.COM>
+Date:   Sun Oct 2 22:50:39 2022 +0100
+
+    Merge pull request #2 from Emeka-Onwuepe/main
+    
+    Changes
+
+[33mcommit 72e9f53da649c972b71d029afee493820dd2340d[m
+Author: EMEKA ONWUEPE <PASCALEMY2010@GMAIL.COM>
+Date:   Wed Sep 21 12:40:38 2022 +0100
+
+    Create pylint.yml
+
+[33mcommit af8989fa4c3936c11076e387b8eefaf155161d08[m
+Merge: 1b4f246 06913b5
+Author: EMEKA ONWUEPE <PASCALEMY2010@GMAIL.COM>
+Date:   Wed Sep 21 12:39:35 2022 +0100
+
+    Merge pull request #1 from Emeka-Onwuepe/contributor
+    
+    Delete .github directory
+
+[33mcommit 06913b55198d896feefe7ec981678cbe07fe2285[m
+Author: EMEKA ONWUEPE <PASCALEMY2010@GMAIL.COM>
+Date:   Wed Sep 21 12:25:02 2022 +0100
+
+    Delete .github directory
+
+[33mcommit 1b4f246f000e20b78b00d85a7e77680fa32fec90[m
+Author: EMEKA ONWUEPE <PASCALEMY2010@GMAIL.COM>
+Date:   Wed Sep 21 11:38:06 2022 +0100
+
+    Create pylint.yml
+
+[33mcommit f093936401c1375056027259513190fb0eca6b31[m
+Author: EMEKA ONWUEPE <pascalemy2010@gmail.com>
+Date:   Fri Sep 9 20:19:46 2022 +0100
+
+    feat: updated gitignore
+
+[33mcommit a50651ceb26d25063d39812a6c2961378103b965[m
+Author: EMEKA ONWUEPE <pascalemy2010@gmail.com>
+Date:   Fri Sep 9 20:18:14 2022 +0100
+
+    feat: basic project setups
