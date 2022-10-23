@@ -7,6 +7,8 @@
     font-family: "Roboto";
     font-size: 16px;
     line-height: 1.5;
+    background-color: #0d0c0cf0;
+    color: white;
 }
 
 main,
@@ -22,6 +24,7 @@ footer {
 a {
     text-decoration: none;
     display: inline-block;
+    color: aqua;
 }
 
 .bigwrapper {
@@ -29,7 +32,6 @@ a {
     flex-direction: column;
     margin: 0px 10px;
     align-content: center;
-    background-color: #0d0c0cf0;
 }
 
 header {
@@ -45,14 +47,14 @@ header {
 }
 
 .logo h1 {
-    color: white;
+    /* color: white; */
     padding: 3px;
-    border: 1px solid white;
+    border: 1px solid aqua;
     margin: 10px;
 }
 
 .logo em {
-    color: white;
+    color: aqua;
 }
 
 .sperator {

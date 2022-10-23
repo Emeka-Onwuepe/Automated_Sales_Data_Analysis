@@ -36,6 +36,15 @@
         <div class="sperator"></div>
         <main>
 
+            <section>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <legend>Upload Your Data</legend>
+                    <label for="data">Select File</label>
+                    <input type="file" name="data" id="data" accept=".csv,.xlsx">
+
+                </form>
+            </section>
 
         </main>
         <div onclick="window.scrollTo({top: 0, behavior:'smooth'})" id="backToTop" class="backToTop">
