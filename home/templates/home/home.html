@@ -36,13 +36,17 @@
         <div class="sperator"></div>
         <main>
 
-            <section>
-                <form action="" method="post">
+            <section class="formsection">
+                <form action="{% url 'frontview:homeView' %}" enctype="multipart/form-data" method="post">
                     {% csrf_token %}
-                    <legend>Upload Your Data</legend>
-                    <label for="data">Select File</label>
-                    <input type="file" name="data" id="data" accept=".csv,.xlsx">
-
+                    <fieldset>
+                        <legend>Upload Your Data</legend>
+                        {{form}}
+                        <input type="text" name="user_id" id="id_user_id">
+                        <!-- <label for="data">Select File</label>
+                    <input type="file" name="data" id="data" accept=".csv,.xlsx"> -->
+                        <button id="submitButton" type="submit">Upload</button>
+                    </fieldset>
                 </form>
             </section>
 
@@ -61,6 +65,7 @@
         </footer>
     </div>
     {% block javascript %}
+    <script src="{% static 'javascript/state.js' %}"></script>
     <script src="{% static 'javascript/home.js' %}"></script>
     {% endblock javascript %}
 </body>

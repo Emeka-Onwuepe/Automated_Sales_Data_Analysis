@@ -12,8 +12,8 @@ class Dataset(models.Model):
     user_id  = models.ForeignKey(User_id, on_delete=models.CASCADE,related_name="dataset_user_id")
     dataset_id = models.CharField("dataset_id",max_length = 150,blank=None)
     dataset = models.FileField("dataset",blank=False)
-    report_title = models.FileField("report title",blank=False) 
-    currency_symbol = models.FileField("currency symbol",blank=False) 
+    report_title = models.CharField("report title",blank=False,max_length = 256) 
+    currency_symbol = models.CharField("currency symbol",blank=False,max_length = 10) 
     zipfolder = models.FileField("zipfolder",blank=True)
     
     class Meta:

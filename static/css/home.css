@@ -7,7 +7,6 @@
     font-family: "Roboto";
     font-size: 16px;
     line-height: 1.5;
-    background-color: #0d0c0cf0;
     color: white;
 }
 
@@ -32,6 +31,7 @@ a {
     flex-direction: column;
     margin: 0px 10px;
     align-content: center;
+    background-color: #201c1c;
 }
 
 header {
@@ -44,6 +44,7 @@ header {
     background-color: white;
     z-index: 5;
     background-color: #040303;
+    border-bottom: 1px dotted white;
 }
 
 .logo h1 {
@@ -59,10 +60,52 @@ header {
 
 .sperator {
     margin-top: 65px;
+    margin-bottom: 5px;
 }
 
 main {
     min-height: calc(100vh - 132px);
+    background-color: #201c1c;
+}
+
+.formsection {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
+fieldset {
+    border: 2px dotted white;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+legend {
+    margin: 0px auto;
+}
+
+input,
+select {
+    margin-bottom: 5px;
+    color: #000;
+    padding: 3px;
+}
+
+#id_dataset {
+    color: #fff;
+}
+
+label[for=id_dataset_id] {
+    display: none;
+}
+
+#submitButton {
+    margin-top: 5px;
+    background-color: aqua;
+    color: #040303;
+    border-radius: 50px;
+    border-color: aqua;
 }
 
 footer {
@@ -98,4 +141,14 @@ footer span {
 .backToTop a {
     color: white;
     font-size: 30px;
+}
+
+@media screen and (min-width:1520px) {
+    .bigwrapper {
+        width: 1500px;
+        margin: 0px auto;
+    }
+    header {
+        width: 1500px;
+    }
 }
