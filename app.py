@@ -1,6 +1,6 @@
 from read_data_path import file_path,file_extension
 import pandas as pd
-# import numpy as np
+import numpy as np
 # import matplotlib.pyplot as plt
 # import seaborn as sns
 # from general_cleaning import clean_cols
@@ -19,6 +19,7 @@ mapper,columns,non_classified,not_matched = data
 
 # rename columns
 df.columns = columns
+print(mapper)
 print(df[mapper["c_name"]][:10])
 
 print("ran successfully")
