@@ -1,14 +1,23 @@
 from django.shortcuts import render
 from data_sets.forms import DataSetForm
-import pandas as pd
+from data_sets.models import Dataset
+from users.models import User_id
 
 # Create your views here.
 def homeView(request):
     form = DataSetForm()
     if request.method == "POST":
-            form = DataSetForm(data= request.POST,files=request.FILES)
+            user_id = None
+            data = None
+            try:
+                    user_id = User_id.objects.get(user_id = request.POST['user_id'])
+            except User_id.DoesNotExist:
+                    user_id = User_id.objects.create(user_id = request.POST['user_id'])
+            dataset = Dataset.objects.create(user_id = user_id)
+            form = DataSetForm(data= request.POST,files=request.FILES,instance = dataset)
             if form.is_valid():
                 data = form.save()
-                print(data)
-    
+                
+                
+            
     return render(request,'home/home.html',{"form":form})

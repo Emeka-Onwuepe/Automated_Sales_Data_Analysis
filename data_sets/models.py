@@ -26,12 +26,5 @@ class Dataset(models.Model):
         """Unicode representation of Dataset."""
         return f'{self.dataset_id} {self.dataset}'
 
-    def save(self):
-        """Save method for Dataset."""
-        pass
-
-    def get_absolute_url(self):
-        """Return absolute url for Dataset."""
-        return ('')
 
     # TODO: Define custom methods here
