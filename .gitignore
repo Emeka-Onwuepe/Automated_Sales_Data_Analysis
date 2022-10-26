@@ -18,7 +18,7 @@ __pycache__/
 *$py.class
 
 input/
-
+media/
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
