@@ -1,11 +1,7 @@
  {% extends 'home/home.html' %}{% load static %} {% block main %}
-<script>
-    console.log("{{column}}")
-    console.log("hello")
-</script>
 
 <section class="formsection">
-    <form action="" method="post">
+    <form action="{% url 'frontview:homeView' %}" method="post">
         <fieldset id="classify">
             <legend>Hello</legend>
 
@@ -19,6 +15,7 @@
     {% endfor %}
     <option value="not found">Not Found</option>
 </select></div> {% endfor %}
+<button id="submitButton" type="submit">Done</button>
         </fieldset>
     </form>
 </section>
