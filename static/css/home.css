@@ -96,6 +96,34 @@ select {
     color: #fff;
 }
 
+#classify {
+    border: 0px dotted white;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-around;
+}
+
+.formdiv {
+    flex-basis: 300px;
+    margin-bottom: 5px;
+}
+
+.formdiv label {
+    display: block;
+}
+
+.formdiv select {
+    width: 100%;
+}
+
+select {
+    background-color: #000;
+    color: white;
+}
+
 label[for=id_dataset_id] {
     display: none;
 }

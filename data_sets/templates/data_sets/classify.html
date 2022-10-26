@@ -1,0 +1,26 @@
+ {% extends 'home/home.html' %}{% load static %} {% block main %}
+<script>
+    console.log("{{column}}")
+    console.log("hello")
+</script>
+
+<section class="formsection">
+    <form action="" method="post">
+        <fieldset id="classify">
+            <legend>Hello</legend>
+
+            {% for col in column %}
+            <div class="formdiv">
+                <label for="{{col}}">{{col}}</label>
+                <select name="{{col}}" id="">
+    <option style="color:white;" value="none">Select the appropriate label</option>
+    {% for label,value in sub_classes.items %}
+    <option value="{{value}}">{{label}}</option>
+    {% endfor %}
+    <option value="not found">Not Found</option>
+</select></div> {% endfor %}
+        </fieldset>
+    </form>
+</section>
+
+{% endblock main %}

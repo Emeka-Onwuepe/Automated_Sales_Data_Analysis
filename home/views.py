@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render,reverse
+from django.http import HttpResponseRedirect
 from data_sets.forms import DataSetForm
 from data_sets.models import Dataset
 from users.models import User_id
@@ -17,7 +18,6 @@ def homeView(request):
             form = DataSetForm(data= request.POST,files=request.FILES,instance = dataset)
             if form.is_valid():
                 data = form.save()
-                
-                
-            
+                return HttpResponseRedirect(reverse('process:classifyView',
+                        kwargs={"user_id":data.user_id,"dataset_id":data.dataset_id}))          
     return render(request,'home/home.html',{"form":form})

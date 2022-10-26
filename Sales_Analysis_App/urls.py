@@ -21,6 +21,7 @@ from django.urls import path,include
 
 urlpatterns = [
     path('',include("home.urls"),name='home'),
+    path('process/',include("data_sets.urls"),name='dataset'),
     path('admin/', admin.site.urls),
 ]
 
