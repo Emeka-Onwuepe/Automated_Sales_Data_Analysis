@@ -135,7 +135,10 @@ label[for=id_dataset_id] {
     border-radius: 50px;
     border-color: aqua;
 }
-
+.submitButton {
+	width: 120px;
+	margin-left: calc(50% - 60px);
+}
 footer {
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.9);

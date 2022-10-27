@@ -1,9 +1,10 @@
  {% extends 'home/home.html' %}{% load static %} {% block main %}
 
 <section class="formsection">
-    <form action="{% url 'frontview:homeView' %}" method="post">
+    <form action="{% url 'process:analysisView' user_id dataset_id %}" method="post">
+        {% csrf_token %}
         <fieldset id="classify">
-            <legend>Hello</legend>
+            <legend><h3>Help us understand your data </h3></legend>
 
             {% for col in column %}
             <div class="formdiv">
@@ -15,8 +16,9 @@
     {% endfor %}
     <option value="not found">Not Found</option>
 </select></div> {% endfor %}
-<button id="submitButton" type="submit">Done</button>
+
         </fieldset>
+        <button class="submitButton" id="submitButton" type="submit">Done</button>
     </form>
 </section>
 
