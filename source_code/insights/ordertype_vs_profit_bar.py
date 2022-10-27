@@ -10,8 +10,8 @@ def order_type_profit(dataframe, order_type, profit):
     Parameters
     -----------
     dataframe : The dataframe of the data 
-    quantity : str or int or Series or array-like. Either a name of a column in `dataframe`, 
-    or a pandas Series or array_like object. it should be related to quantity column
+    order_type : str or int or Series or array-like. Either a name of a column in `dataframe`, 
+    or a pandas Series or array_like object. it should be related to type of order column
     profit : str or int or Series or array-like. Either a name of a column in `dataframe`, 
     or a pandas Series or array_like object. it should be related to profit
     
