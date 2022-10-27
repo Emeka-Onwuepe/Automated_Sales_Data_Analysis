@@ -1,0 +1,13 @@
+SUB_CLASSES =  {'Stock Date':'stock_date','Sales Date':'sales_date',
+               'Order ID':'order_id','Product ID':'p_id','Unit Cost Price':'unit-cp',
+               "Discount":"discount",'Quantity Sold':'qty-sold', "Payment Status":"payment_status",
+               "Product Category":"p_cat","Processing Cost":"pro_cost",'Selling Price':'sp', 
+               "Sales' Grouping": "sales_grouping", 'Product Name':'p_name',
+               'Shippinng Postal Code':'ship_p_code','Delivery Date':'del_date',
+               'Delivery Status':'delivered','Delivery Location':'del_location',
+                'Delivery Cost':'del-cost','Delivery Charge':'del-charge',
+                'Customer ID':'c_id','Customers\' Name':'c_name',
+                "Customers' Grouping":"c_grouping",
+                'Customer City':'c-city', 'Customer Region':'c-region',
+                'Gender':'gender',
+               }
