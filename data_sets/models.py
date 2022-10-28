@@ -15,6 +15,7 @@ class Dataset(models.Model):
     report_title = models.CharField("report title",blank=False,max_length = 256) 
     currency_symbol = models.CharField("currency symbol",blank=False,max_length = 10) 
     zipfolder = models.FileField("zipfolder",blank=True)
+    columns = models.TextField("columns",blank=True)
     
     class Meta:
         """Meta definition for Dataset."""
