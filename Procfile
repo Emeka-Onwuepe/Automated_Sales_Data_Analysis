@@ -1,0 +1,1 @@
+web: gunicorn Sales_Analysis_App.wsgi --log-file - 
