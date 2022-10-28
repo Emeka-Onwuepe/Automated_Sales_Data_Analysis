@@ -1,6 +1,5 @@
 {% extends 'home/home.html' %}{% load static %} {% block main %}
 <h1>Reports Dashboard</h1>
 <p>Please note that every data not deleted within 24hrs will be automatically deleted</p>
-{{mapper}}
-{{df}}
+{{df|safe}}
 {% endblock main %}
