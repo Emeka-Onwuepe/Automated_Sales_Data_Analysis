@@ -1,0 +1,44 @@
+* {
+    font-size: 16px;
+}
+
+h3,
+h3 a {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 20.25px;
+}
+
+h1 {
+    font-size: 22.7813px;
+    font-weight: bold;
+}
+
+@media screen and (min-width:750px) {
+    * {
+        font-size: 18px;
+    }
+    h3,
+    h3 a {
+        font-size: 20.5px;
+        font-weight: bold;
+    }
+    h2 {
+        font-size: 22.78px;
+    }
+    h1 {
+        font-size: 25.63px;
+        font-weight: bold;
+    }
+}
+
+h1,
+h2,
+h3,
+h4 {
+    letter-spacing: 1px;
+    word-spacing: 3px;
+}
