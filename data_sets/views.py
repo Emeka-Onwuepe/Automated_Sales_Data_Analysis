@@ -44,5 +44,7 @@ def AnalysisView(request,user_id,dataset_id):
         df,dataset = read_dataset(Dataset,user_id,dataset_id,pd)
         df.columns = json.loads(dataset.columns)
         df = df[mapper.values()]
+        
+        
 
     return render(request,"data_sets/dashboard.html",{"df":df.head().to_html()})
