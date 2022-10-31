@@ -3,6 +3,7 @@ import json
 import pandas as pd
 import re
 from data_sets.models import Dataset
+from source_code.clean.general import DATA_CLEANING
 from source_code.statics import SUB_CLASSES
 from source_code.read_file import read_dataset
 
@@ -47,16 +48,25 @@ def AnalysisView(request,user_id,dataset_id):
         df = df[mapper.values()]
         
         multiple_features = {}
+        error_mgs = {"out_of_bound":[]}
+        for mapper_key in mapper.keys():
+            sub_class = None
+            if re.search('&#&\d',mapper_key):
+                sub_class,num = mapper_key.split('&#&')
         
-        for multiple_key in mapper.keys():
-            
-            if re.search('&#&\d',multiple_key):
-                sub_class,num = multiple_key.split('&#&')
                 try:
                     multiple_features[sub_class]
-                    multiple_features[sub_class].append(multiple_key)
+                    multiple_features[sub_class].append(mapper_key)
                 except KeyError:
-                    multiple_features[sub_class] = [sub_class,multiple_key]
+                    multiple_features[sub_class] = [sub_class,mapper_key]
+           
+            try:
                 
+                data_key = sub_class if sub_class else mapper_key
+                df[mapper[mapper_key]] = DATA_CLEANING[data_key](df[mapper[mapper_key]])
+            except pd.errors.OutOfBoundsDatetime:
+                error_mgs["out_of_bound"].append(mapper[mapper_key])
+                df.drop(mapper[mapper_key],axis=1,inplace=True)
+                 
         
-    return render(request,"data_sets/dashboard.html",{"df":df.head().to_html()})
+    return render(request,"data_sets/dashboard.html",{"df":df.head().to_html(),"error":error_mgs})

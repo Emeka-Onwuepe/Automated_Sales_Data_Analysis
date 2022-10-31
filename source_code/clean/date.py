@@ -1,24 +1,13 @@
-import pandas
+import pandas as pd
 
-def clean_date(dataframe, date_column):
-    """
-    This function converts date columns to datetime
-    dataframe = None
-    date_column= None
-    
-    Parameters
-    -----------
-    dataframe : The dataframe of the data 
-    date_column : int or Series, object like column. Either a name of a column in `dataframe`, 
-    or a pandas Series or array_like object. it should be a date column
-    """
-    
-    date= dataframe[date_column]
-    if date.dtypes == 'datetime64[ns]':
-        return (date)
+def clean_date(column):
+    if column.dtypes == 'datetime64[ns]':
+        return column
     else:
-        date_transformed = pd.to_datetime(date)
-        return (date_transformed)
+        column = column.astype("str")
+        column = column.apply(lambda data:data.strip())
+        date_transformed = pd.to_datetime(column,infer_datetime_format=True)
+        return date_transformed
         
     
 def clean_date_outliers(dataframe, date_column):
