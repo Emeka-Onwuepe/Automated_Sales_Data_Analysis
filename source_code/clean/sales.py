@@ -1,6 +1,6 @@
 import pandas as pd
 
-def clean_sale_column(dataframe, sale_data_column):
+def clean_sale_column(sale_data_column):
     """
     This function clean all messiness and tidy price data column.
     This function takes in a dataframe column and return the cleaned version of the dataframe.
@@ -13,7 +13,7 @@ def clean_sale_column(dataframe, sale_data_column):
     sale_data_column : int or Series, object like column. Either a name of a column in `dataframe`, 
     or a pandas Series or array_like object. it should be a sale column
     """
-    sale_column= dataframe[sale_data_column]
+    sale_column = sale_data_column
     if pd.api.types.is_numeric_dtype(sale_column):
         return (sale_column)
 

@@ -1,18 +1,20 @@
 from .date import clean_date
-
+from .sales import clean_sale_column
+from .confirmations import delivery
+from .identifiers import clean_identifiers,clean_genders
 
 DATA_CLEANING = {'stock_date':clean_date,'sales_date':clean_date,
-               'Order ID':'order_id','Product ID':'p_id','Unit Cost Price':'unit-cp',
-               "Discount Percent":"discount_per","Discounted Amount":"discount_amount",
-               'Quantity Sold':'qty-sold', "Payment Status":"payment_status",
-               "Product Category":"p_cat","Processing Cost":"pro_cost",
-               'Selling Price':'sp', 'Selling Price (discounted)':'sp_dis',
-               "Sales' Grouping": "sales_grouping", 'Product Name':'p_name',
-               'Shippinng Postal Code':'ship_p_code','del_date':clean_date,
-               'Delivery Status':'delivered','Delivery Location':'del_location',
-                'Delivery Cost':'del-cost','Delivery Charge':'del-charge',
-                'Customer ID':'c_id','Customers\' Name':'c_name',
-                "Customers' Grouping":"c_grouping",
-                'Customer City':'c-city', 'Customer Region':'c-region',
-                'Gender':'gender',
+               'order_id':clean_identifiers,'p_id':clean_identifiers,'unit-cp':clean_sale_column,
+               "discount_per":clean_sale_column,"discount_amount":clean_sale_column,
+               'qty-sold':clean_sale_column, "payment_status":clean_identifiers,
+               "p_cat":clean_identifiers,"pro_cost":clean_sale_column,
+               'sp':clean_sale_column, 'sp_dis':clean_sale_column,
+               "sales_grouping":clean_identifiers,'p_name':clean_identifiers,
+               'ship_p_code':clean_identifiers,'del_date':clean_date,
+               'delivered':delivery,'del_location':clean_identifiers,
+                'del-cost':clean_sale_column,'del-charge':clean_sale_column,
+                'c_id':clean_identifiers,'c_name':clean_identifiers,
+                "c_grouping":clean_identifiers,
+                'c-city':clean_identifiers,'c-region':clean_identifiers,
+                'gender':clean_genders,
                }

@@ -139,6 +139,9 @@ label[for=id_dataset_id] {
 	width: 120px;
 	margin-left: calc(50% - 60px);
 }
+
+table{overflow:scroll;}
+
 footer {
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.9);
