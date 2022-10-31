@@ -4,7 +4,7 @@ import pandas as pd
 import re
 from data_sets.models import Dataset
 from source_code.clean.general import DATA_CLEANING
-from source_code.statics import SUB_CLASSES
+from source_code.sub_classes import SUB_CLASSES
 from source_code.read_file import read_dataset
 
 # Create your views here.
