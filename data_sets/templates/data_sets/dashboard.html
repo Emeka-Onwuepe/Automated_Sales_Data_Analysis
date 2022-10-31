@@ -1,7 +1,9 @@
 {% extends 'home/home.html' %}{% load static %} {% block main %}
 <h1>Reports Dashboard</h1>
 <p>Please note that every data not deleted within 24hrs will be automatically deleted</p>
+<div style="overflow:scroll;">
 {{df|safe}}
+</div>
 <P>{% if error.out_of_bound %}We dropped {% for feature in error.out_of_bound %} {% if forloop.last and forloop.first %} {{feature}} {% elif forloop.last and not forloop.first %} and {{feature}} {% else %} {{feature}} , {% endif %} {% endfor %} because we
     were unable to convert {% if error.out_of_bound|length == 1 %} it {% else %} them {% endif %} to date datatype.{% endif %}
 </P>
