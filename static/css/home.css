@@ -26,6 +26,10 @@ a {
     color: aqua;
 }
 
+body {
+    background-color: #201c1c;
+}
+
 .bigwrapper {
     display: flex;
     flex-direction: column;
@@ -63,9 +67,15 @@ header {
     margin-bottom: 5px;
 }
 
+h1{text-align: center;}
+
 main {
     min-height: calc(100vh - 132px);
     background-color: #201c1c;
+    /* display: flex;
+    align-items: center; */
+    margin: 0px auto;
+
 }
 
 .formsection {
@@ -141,6 +151,11 @@ label[for=id_dataset_id] {
 }
 
 table{overflow:scroll;}
+td{
+    border: 1px solid white;
+    padding: 3px;
+    text-align: center;
+}
 
 footer {
     padding: 10px;

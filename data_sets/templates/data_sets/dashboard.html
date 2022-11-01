@@ -2,7 +2,35 @@
 <h1>Reports Dashboard</h1>
 <p>Please note that every data not deleted within 24hrs will be automatically deleted</p>
 <div style="overflow:scroll;">
-{{df|safe}}
+{{head|safe}}
+</div>
+<div style="display: flex;flex-direction:row">
+    <table>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Data Type</th>
+            </tr>
+        </thead>
+        {% for index,col in df.dtypes.items  %}
+    <tr>
+        <td>{{index}}</td>
+        <td>{{col}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th>Null Values</th>
+            </tr>
+        </thead>
+        {% for col in df.isnull.sum  %}
+    <tr>
+        <td>{{col}}</td>
+    </tr>
+    {% endfor %}
+    </table>
 </div>
 <P>{% if error.out_of_bound %}We dropped {% for feature in error.out_of_bound %} {% if forloop.last and forloop.first %} {{feature}} {% elif forloop.last and not forloop.first %} and {{feature}} {% else %} {{feature}} , {% endif %} {% endfor %} because we
     were unable to convert {% if error.out_of_bound|length == 1 %} it {% else %} them {% endif %} to date datatype.{% endif %}
