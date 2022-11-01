@@ -67,7 +67,7 @@ def AnalysisView(request,user_id,dataset_id):
             except pd.errors.OutOfBoundsDatetime:
                 error_mgs["out_of_bound"].append(mapper[mapper_key])
                 df.drop(mapper[mapper_key],axis=1,inplace=True)
-                  
+                 
         
     return render(request,"data_sets/dashboard.html",{"head":df.head().to_html(), 
                                                         # "types": df.dtypes,
