@@ -69,4 +69,5 @@ def AnalysisView(request,user_id,dataset_id):
                 df.drop(mapper[mapper_key],axis=1,inplace=True)
                  
         
-    return render(request,"data_sets/dashboard.html",{"df":df.head().to_html(),"error":error_mgs})
+    return render(request,"data_sets/dashboard.html",{"df":df.head().to_html(), 
+                  "info":df.info().to_html(),"error":error_mgs})
