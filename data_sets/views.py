@@ -1,9 +1,10 @@
+from functools import _make_key
 from django.shortcuts import render
 import json
 import pandas as pd
 import re
 from data_sets.models import Dataset
-from source_code.clean.general import DATA_CLEANING
+from source_code.clean.general import DATA_CLEANING, clean_data
 from source_code.sub_classes import SUB_CLASSES
 from source_code.read_file import read_dataset
 
@@ -49,6 +50,7 @@ def AnalysisView(request,user_id,dataset_id):
         
         multiple_features = {}
         error_mgs = {"out_of_bound":[]}
+        new_mapper = mapper.copy()
         for mapper_key in mapper.keys():
             sub_class = None
             if re.search('&#&\d',mapper_key):
@@ -67,6 +69,13 @@ def AnalysisView(request,user_id,dataset_id):
             except pd.errors.OutOfBoundsDatetime:
                 error_mgs["out_of_bound"].append(mapper[mapper_key])
                 df.drop(mapper[mapper_key],axis=1,inplace=True)
+                del new_mapper[mapper_key]
+                if re.search('&#&\d',mapper_key):
+                    sub_class,num = mapper_key.split('&#&')
+                    idx = multiple_features[sub_class].index(mapper_key)
+                    multiple_features[sub_class].pop(idx)
+        mapper = new_mapper
+        df = clean_data(df,mapper,multiple_features)        
                   
         
     return render(request,"data_sets/dashboard.html",{"head":df.head().to_html(), 

@@ -16,9 +16,9 @@ def clean_sale_column(sale_data_column):
     sale_column = sale_data_column
     if pd.api.types.is_numeric_dtype(sale_column):
         return (sale_column)
-
-    first_clean= sale_column.str.replace(',', '')
-    cleaned_column= first_clean.str.extract("([\d.,]+)")
+    cleaned_column = sale_column.astype("str")
+    cleaned_column = cleaned_column.str.replace(',', '')
+    cleaned_column = cleaned_column.str.extract("([\d.,]+)")
     cleaned_column= cleaned_column.astype(float)
     return (cleaned_column)
 
