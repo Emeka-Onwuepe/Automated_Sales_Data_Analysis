@@ -15,7 +15,14 @@
         {% for index,col in df.dtypes.items  %}
     <tr>
         <td>{{index}}</td>
-        <td>{{col}}</td>
+        <td>{% if col == "datetime64[ns]" %}
+                Date
+            {% elif col == "object"  %}
+          String
+        {% else %}
+          float
+        {% endif %}
+        </td>
     </tr>
     {% endfor %}
     </table>

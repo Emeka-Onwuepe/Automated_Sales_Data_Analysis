@@ -4,7 +4,7 @@ import json
 import pandas as pd
 import re
 from data_sets.models import Dataset
-from source_code.clean.general import DATA_CLEANING, clean_data
+from source_code.clean.general import DATA_TYPE_SETTER, clean_data, create_mapper, set_data_types
 from source_code.sub_classes import SUB_CLASSES
 from source_code.read_file import read_dataset
 
@@ -30,51 +30,13 @@ def AnalysisView(request,user_id,dataset_id):
     if request.method == "POST":
         data = dict(request.POST)
         del data['csrfmiddlewaretoken']
-        mapper = {}
-        count = 0
-        for key,value in data.items():
-            count+=1
-            value = value[0]
-            try:
-                mapper[value]
-                value = f"{value}&#&{count}"
-                if value != "none":
-                    mapper[value] = key
-            except KeyError:
-                if value != "none":
-                    mapper[value] = key
 
+        mapper = create_mapper(data)
         df,dataset = read_dataset(Dataset,user_id,dataset_id,pd)
         df.columns = json.loads(dataset.columns)
         df = df[mapper.values()]
         
-        multiple_features = {}
-        error_mgs = {"out_of_bound":[]}
-        new_mapper = mapper.copy()
-        for mapper_key in mapper.keys():
-            sub_class = None
-            if re.search('&#&\d',mapper_key):
-                sub_class,num = mapper_key.split('&#&')
-        
-                try:
-                    multiple_features[sub_class]
-                    multiple_features[sub_class].append(mapper_key)
-                except KeyError:
-                    multiple_features[sub_class] = [sub_class,mapper_key]
-           
-            try:
-                
-                data_key = sub_class if sub_class else mapper_key
-                df[mapper[mapper_key]] = DATA_CLEANING[data_key](df[mapper[mapper_key]])
-            except pd.errors.OutOfBoundsDatetime:
-                error_mgs["out_of_bound"].append(mapper[mapper_key])
-                df.drop(mapper[mapper_key],axis=1,inplace=True)
-                del new_mapper[mapper_key]
-                if re.search('&#&\d',mapper_key):
-                    sub_class,num = mapper_key.split('&#&')
-                    idx = multiple_features[sub_class].index(mapper_key)
-                    multiple_features[sub_class].pop(idx)
-        mapper = new_mapper
+        df,mapper,multiple_features,error_mgs = set_data_types(df,mapper,DATA_TYPE_SETTER)
         df = clean_data(df,mapper,multiple_features)        
                   
         
