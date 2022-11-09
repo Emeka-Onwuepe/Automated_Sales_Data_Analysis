@@ -1,4 +1,5 @@
 from pandas.errors import OutOfBoundsDatetime
+from pandas.api.types import is_numeric_dtype
 from re import search
 from source_code.sub_classes import CRITICAL
 from .date import clean_date
@@ -70,10 +71,8 @@ def set_data_types(df,mapper,set_data_data):
     return df,new_mapper,multiple_features,error_mgs
     
 
-def clean_data(df,mapper,multiple_features,critical=CRITICAL):
-    # null_columns =  df.isnull().sum().index
-    # column_names = list(column_mapper.keys())
-
+def clean_null(df,mapper,multiple_features,critical=CRITICAL):
+    
     for mapper_key in mapper.keys():
         # check if the key is multiple
         if search('&#&\d',mapper_key):
@@ -92,6 +91,10 @@ def clean_data(df,mapper,multiple_features,critical=CRITICAL):
                         # check if an object
                         if df[mapper[multiple_key]].dtype == "object":
                             df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna("unknown") 
+                        elif df[mapper[multiple_key]].dtype == "datetime64[ns]":
+                            df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna(method = "ffill")
+                        elif is_numeric_dtype(df[mapper[multiple_key]]):
+                            df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna(0)
 
         else:
             # check if a critical feature
@@ -105,27 +108,11 @@ def clean_data(df,mapper,multiple_features,critical=CRITICAL):
                     # check if an object
                     if df[mapper[mapper_key]].dtype == "object":
                         df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna("unknown") 
+                    elif df[mapper[mapper_key]].dtype == "datetime64[ns]":
+                        df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna(method = "ffill")
+                    elif is_numeric_dtype(df[mapper[mapper_key]]):
+                        df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna(0)
 
             
-
-
-    # mapper_values = mapper.values()
-    # keys = list(mapper.keys())
-    
-    # null_keys = []
-    # for index,value in enumerate(mapper_values):
-    #     if value in null_columns:
-    #         null_keys.append(keys[index])
-    
-    # drop critical null values
-    # for key in critical:
-    #     if key in null_keys:
-    #         df = df[df[mapper[key]].notna()]
-    #         try:
-    #             for multiple_key in multiple_features[key]:
-    #                 df = df[df[mapper[multiple_key]].notna()]  
-    #         except KeyError:
-    #             pass
-
     return df
    

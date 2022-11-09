@@ -4,7 +4,7 @@ import json
 import pandas as pd
 import re
 from data_sets.models import Dataset
-from source_code.clean.general import DATA_TYPE_SETTER, clean_data, create_mapper, set_data_types
+from source_code.clean.general import DATA_TYPE_SETTER, clean_null, create_mapper, set_data_types
 from source_code.sub_classes import SUB_CLASSES
 from source_code.read_file import read_dataset
 
@@ -37,7 +37,7 @@ def AnalysisView(request,user_id,dataset_id):
         df = df[mapper.values()]
         
         df,mapper,multiple_features,error_mgs = set_data_types(df,mapper,DATA_TYPE_SETTER)
-        df = clean_data(df,mapper,multiple_features)        
+        df = clean_null(df,mapper,multiple_features)        
                   
         
     return render(request,"data_sets/dashboard.html",{"head":df.head().to_html(), 
