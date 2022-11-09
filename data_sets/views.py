@@ -37,10 +37,13 @@ def AnalysisView(request,user_id,dataset_id):
         df = df[mapper.values()]
         
         df,mapper,multiple_features,error_mgs = set_data_types(df,mapper,DATA_TYPE_SETTER)
-        df = clean_null(df,mapper,multiple_features)        
+        nulls = df[df.isnull().any(axis=1)]
+        df,null_report = clean_null(df,mapper,multiple_features)       
+
                   
         
     return render(request,"data_sets/dashboard.html",{"head":df.head().to_html(), 
+                                                      "nulls": nulls.to_html(),
                                                         # "types": df.dtypes,
                                                         # "types": df.dtypes,
                                                         "error":error_mgs,'df':df})

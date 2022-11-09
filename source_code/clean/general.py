@@ -73,6 +73,8 @@ def set_data_types(df,mapper,set_data_data):
 
 def clean_null(df,mapper,multiple_features,critical=CRITICAL):
     
+    null_report = {"dropped":[],"unknown":[],"zeros":[],"ffill":[]}
+
     for mapper_key in mapper.keys():
         # check if the key is multiple
         if search('&#&\d',mapper_key):
@@ -83,6 +85,7 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
                     # check for null values
                     if df[mapper[multiple_key]].isnull().sum() > 0:
                         # drop null values
+                        null_report["dropped"].append(mapper[multiple_key])
                         df = df[df[mapper[multiple_key]].notna()] 
             else:
                 for multiple_key in multiple_features[sub_class]:
@@ -90,10 +93,13 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
                     if df[mapper[multiple_key]].isnull().sum() > 0:
                         # check if an object
                         if df[mapper[multiple_key]].dtype == "object":
+                            null_report["unknown"].append(mapper[multiple_key])
                             df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna("unknown") 
                         elif df[mapper[multiple_key]].dtype == "datetime64[ns]":
+                            null_report["ffill"].append(mapper[multiple_key])
                             df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna(method = "ffill")
                         elif is_numeric_dtype(df[mapper[multiple_key]]):
+                            null_report["zeros"].append(mapper[multiple_key])
                             df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna(0)
 
         else:
@@ -101,18 +107,22 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
             if mapper_key in critical:
                 # check for null values
                 if df[mapper[mapper_key]].isnull().sum() > 0:
+                    null_report["dropped"].append(mapper[mapper_key])
                     df = df[df[mapper[mapper_key]].notna()]
             else:
                 # check for null values
                 if df[mapper[mapper_key]].isnull().sum() > 0:
                     # check if an object
                     if df[mapper[mapper_key]].dtype == "object":
+                        null_report["unknown"].append(mapper[mapper_key])
                         df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna("unknown") 
                     elif df[mapper[mapper_key]].dtype == "datetime64[ns]":
+                        null_report["ffill"].append(mapper[mapper_key])
                         df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna(method = "ffill")
                     elif is_numeric_dtype(df[mapper[mapper_key]]):
+                        null_report["zeros"].append(mapper[mapper_key])
                         df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna(0)
 
             
-    return df
+    return df,null_report
    
