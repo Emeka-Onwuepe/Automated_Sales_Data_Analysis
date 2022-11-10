@@ -5,6 +5,7 @@ import pandas as pd
 import re
 from data_sets.models import Dataset
 from source_code.clean.general import DATA_TYPE_SETTER, clean_null, create_mapper, set_data_types
+from source_code.clean.identifiers import name_issues,get_name_issues
 from source_code.sub_classes import SUB_CLASSES
 from source_code.read_file import read_dataset
 
@@ -38,7 +39,9 @@ def AnalysisView(request,user_id,dataset_id):
         
         df,mapper,multiple_features,error_mgs = set_data_types(df,mapper,DATA_TYPE_SETTER)
         nulls = df[df.isnull().any(axis=1)]
-        df,null_report = clean_null(df,mapper,multiple_features)       
+        df,null_report = clean_null(df,mapper,multiple_features)
+        name_errors = name_issues(df,mapper,multiple_features,get_name_issues)
+
 
                   
         

@@ -40,5 +40,21 @@ def clean_genders(gen):
     gen = gen.replace("nan",nan)
     return gen
 
-# def name_issues(names):
-#     if search('[0-9@%$/())-]',elem)
+def get_name_issues(names):
+    irregular_name = []
+    for name in names:
+        if search('[0-9@%$/())-]',name):
+            irregular_name.append(name)
+
+def name_issues(df,mapper,multiple_features,get_name_issues):
+    name_errors = {}
+    try:
+        name_errors[mapper["c_name"]] =  get_name_issues(df[mapper["c_name"]])
+        for multiple_key in multiple_features["c_name"]:
+            name_errors[mapper[multiple_key]] =  get_name_issues(df[mapper[multiple_key]])
+    except NameError:
+        try:
+            name_errors[mapper["c_name"]] =  get_name_issues(df[mapper["c_name"]])
+        except NameError:
+            pass
+    return name_errors
