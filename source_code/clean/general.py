@@ -1,5 +1,6 @@
 from pandas.errors import OutOfBoundsDatetime
 from pandas.api.types import is_numeric_dtype
+from numpy import percentile,where,concatenate
 from re import search
 from source_code.sub_classes import CRITICAL
 from .date import clean_date
@@ -69,6 +70,25 @@ def set_data_types(df,mapper,set_data_data):
                 idx = multiple_features[sub_class].index(mapper_key)
                 multiple_features[sub_class].pop(idx)
     return df,new_mapper,multiple_features,error_mgs
+
+
+def handle_outliers(df,col):
+    Q1 = percentile(col, 25,
+                    interpolation = 'midpoint')
+    Q3 = percentile(col, 75,
+                    interpolation = 'midpoint')
+    IQR = Q3 - Q1
+    # Upper bound   
+    upper = where(col >= (Q3+1.5*IQR))
+    # Lower bound
+    lower = where(col<= (Q1-1.5*IQR))
+    df.drop(upper[0], inplace = True)
+    df.drop(lower[0], inplace = True)
+    
+    outliers = concatenate((Q1,Q3),axis=0)
+
+    return df,outliers
+
     
 
 def clean_null(df,mapper,multiple_features,critical=CRITICAL):
@@ -126,40 +146,3 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
             
     return df,null_report
    
-
-# # Importing
-# import sklearn
-# from sklearn.datasets import load_boston
-# import pandas as pd
-# import numpy as np
-
-# # Load the dataset
-# bos_hou = load_boston()
-
-# # Create the dataframe
-# column_name = bos_hou.feature_names
-# df_boston = pd.DataFrame(bos_hou.data)
-# df_boston.columns = column_name
-# df_boston.head()
-
-# ''' Detection '''
-# # IQR
-# Q1 = np.percentile(df_boston['DIS'], 25,
-# 				interpolation = 'midpoint')
-
-# Q3 = np.percentile(df_boston['DIS'], 75,
-# 				interpolation = 'midpoint')
-# IQR = Q3 - Q1
-
-# print("Old Shape: ", df_boston.shape)
-
-# # Upper bound
-# upper = np.where(df_boston['DIS'] >= (Q3+1.5*IQR))
-# # Lower bound
-# lower = np.where(df_boston['DIS'] <= (Q1-1.5*IQR))
-
-# ''' Removing the Outliers '''
-# df_boston.drop(upper[0], inplace = True)
-# df_boston.drop(lower[0], inplace = True)
-
-# print("New Shape: ", df_boston.shape)
