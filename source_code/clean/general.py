@@ -1,6 +1,7 @@
+from pandas import concat
 from pandas.errors import OutOfBoundsDatetime
 from pandas.api.types import is_numeric_dtype
-from numpy import percentile,where,concatenate
+from numpy import percentile,where
 from re import search
 from source_code.sub_classes import CRITICAL
 from .date import clean_date
@@ -72,20 +73,37 @@ def set_data_types(df,mapper,set_data_data):
     return df,new_mapper,multiple_features,error_mgs
 
 
-def handle_outliers(df,col):
+def handle_outliers(df,col,name):
+    print(name)
     Q1 = percentile(col, 25,
                     interpolation = 'midpoint')
     Q3 = percentile(col, 75,
                     interpolation = 'midpoint')
     IQR = Q3 - Q1
     # Upper bound   
-    upper = where(col >= (Q3+1.5*IQR))
+    # upper = where(col >= (Q3+1.5*IQR))
+ 
     # Lower bound
-    lower = where(col<= (Q1-1.5*IQR))
-    df.drop(upper[0], inplace = True)
-    df.drop(lower[0], inplace = True)
+    # lower = where(col<= (Q1-1.5*IQR))
+    # df.drop(upper[0], inplace = True)
+    # df.drop(lower[0], inplace = True)
+
+    upper = (Q3+1.5*IQR)
+    lower = (Q1-1.5*IQR)
+
+    outliers = df.query("@col >= @upper")
+    # outliers = df[col >= upper]
+    print(upper)
+    print(lower)
+    print(outliers)
+
+    # try:
+    #     print(upper)
+    #     print(lower)
+    # except Exception:
+    #     print("no outlier")
     
-    outliers = concatenate((Q1,Q3),axis=0)
+    # outliers = []
 
     return df,outliers
 
@@ -107,6 +125,8 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
                         # drop null values
                         null_report["dropped"].append(mapper[multiple_key])
                         df = df[df[mapper[multiple_key]].notna()] 
+                    # check for outliers
+                    df,outliers = handle_outliers(df,df[mapper[multiple_key]],mapper[multiple_key])
             else:
                 for multiple_key in multiple_features[sub_class]:
                     # check for null values
@@ -121,6 +141,9 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
                         elif is_numeric_dtype(df[mapper[multiple_key]]):
                             null_report["zeros"].append(mapper[multiple_key])
                             df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna(0)
+                    # check for outliers
+                    if is_numeric_dtype(df[mapper[multiple_key]]) or df[mapper[multiple_key]].dtype == "datetime64[ns]":
+                        df,outliers = handle_outliers(df,df[mapper[multiple_key]],mapper[multiple_key])
 
         else:
             # check if a critical feature
@@ -129,6 +152,8 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
                 if df[mapper[mapper_key]].isnull().sum() > 0:
                     null_report["dropped"].append(mapper[mapper_key])
                     df = df[df[mapper[mapper_key]].notna()]
+                # check for outliers
+                df,outliers = handle_outliers(df,df[mapper[mapper_key]],mapper[mapper_key])
             else:
                 # check for null values
                 if df[mapper[mapper_key]].isnull().sum() > 0:
@@ -142,6 +167,9 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
                     elif is_numeric_dtype(df[mapper[mapper_key]]):
                         null_report["zeros"].append(mapper[mapper_key])
                         df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna(0)
+                # check for outliers
+                if is_numeric_dtype(df[mapper[mapper_key]]) or df[mapper[mapper_key]].dtype == "datetime64[ns]":
+                    df,outliers = handle_outliers(df,df[mapper[mapper_key]],mapper[mapper_key])
 
             
     return df,null_report

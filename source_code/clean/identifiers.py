@@ -52,9 +52,9 @@ def name_issues(df,mapper,multiple_features,get_name_issues):
         name_errors[mapper["c_name"]] =  get_name_issues(df[mapper["c_name"]])
         for multiple_key in multiple_features["c_name"]:
             name_errors[mapper[multiple_key]] =  get_name_issues(df[mapper[multiple_key]])
-    except NameError:
+    except KeyError:
         try:
             name_errors[mapper["c_name"]] =  get_name_issues(df[mapper["c_name"]])
-        except NameError:
+        except KeyError:
             pass
     return name_errors
