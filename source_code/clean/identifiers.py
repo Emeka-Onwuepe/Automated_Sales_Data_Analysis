@@ -32,7 +32,7 @@ def clean_genders(gen):
             else:
                 gen[i] = 'unknown gender'
         except AttributeError:
-            if is_numeric_dtype(sale_column):
+            if is_numeric_dtype(gen):
                 gen[i] = 'unknown gender'
             else:
                  gen[i] = nan
@@ -58,3 +58,14 @@ def name_issues(df,mapper,multiple_features,get_name_issues):
         except KeyError:
             pass
     return name_errors
+
+def clean_age(age):
+     
+    sale_column = age
+    if is_numeric_dtype(sale_column):
+        return sale_column.astype("int")
+    cleaned_column = sale_column.astype("str")
+    cleaned_column = cleaned_column.str.replace(',', '')
+    cleaned_column = cleaned_column.str.extract("([\d]+)")
+    cleaned_column= cleaned_column.astype("int")
+    return (cleaned_column)

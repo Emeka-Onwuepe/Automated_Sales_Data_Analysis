@@ -1,6 +1,4 @@
-from locale import currency
 from django.db import models
-
 from users.models import User_id
 
 # Create your models here.

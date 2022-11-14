@@ -1,13 +1,13 @@
-from pandas import concat
+
 from pandas.errors import OutOfBoundsDatetime
 from pandas.api.types import is_numeric_dtype
-from numpy import percentile,where
+from numpy import percentile
 from re import search
 from source_code.sub_classes import CRITICAL
 from .date import clean_date
 from .sales import clean_sale_column
 from .confirmations import delivery
-from .identifiers import clean_identifiers,clean_genders
+from .identifiers import clean_age, clean_identifiers,clean_genders
 
 
 DATA_TYPE_SETTER = {'stock_date':clean_date,'sales_date':clean_date,
@@ -23,7 +23,7 @@ DATA_TYPE_SETTER = {'stock_date':clean_date,'sales_date':clean_date,
                 'c_id':clean_identifiers,'c_name':clean_identifiers,
                 "c_grouping":clean_identifiers,
                 'c_city':clean_identifiers,'c_region':clean_identifiers,
-                'gender':clean_genders,
+                'age':clean_age,'gender':clean_genders,
                }
 
 def create_mapper(data):
@@ -73,45 +73,26 @@ def set_data_types(df,mapper,set_data_data):
     return df,new_mapper,multiple_features,error_mgs
 
 
-def handle_outliers(df,col,name):
-    print(name)
+def handle_outliers(df,col,col_name,outliers_report):
     Q1 = percentile(col, 25,
                     interpolation = 'midpoint')
     Q3 = percentile(col, 75,
                     interpolation = 'midpoint')
     IQR = Q3 - Q1
-    # Upper bound   
-    # upper = where(col >= (Q3+1.5*IQR))
- 
-    # Lower bound
-    # lower = where(col<= (Q1-1.5*IQR))
-    # df.drop(upper[0], inplace = True)
-    # df.drop(lower[0], inplace = True)
-
     upper = (Q3+1.5*IQR)
     lower = (Q1-1.5*IQR)
+    outliers_report["range"][col_name] = [lower,upper]
+    outliers = df.query("@col > @upper | @col < @lower")
+    outliers_report[col_name] = outliers
 
-    outliers = df.query("@col >= @upper")
-    # outliers = df[col >= upper]
-    print(upper)
-    print(lower)
-    print(outliers)
-
-    # try:
-    #     print(upper)
-    #     print(lower)
-    # except Exception:
-    #     print("no outlier")
-    
-    # outliers = []
-
-    return df,outliers
+    return df,outliers_report
 
     
 
-def clean_null(df,mapper,multiple_features,critical=CRITICAL):
+def clean_df(df,mapper,multiple_features,handle_outliers=handle_outliers,critical=CRITICAL):
     
     null_report = {"dropped":[],"unknown":[],"zeros":[],"ffill":[]}
+    outliers_report = {"range":{}}
 
     for mapper_key in mapper.keys():
         # check if the key is multiple
@@ -126,7 +107,8 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
                         null_report["dropped"].append(mapper[multiple_key])
                         df = df[df[mapper[multiple_key]].notna()] 
                     # check for outliers
-                    df,outliers = handle_outliers(df,df[mapper[multiple_key]],mapper[multiple_key])
+                    df,outliers_report = handle_outliers(df,df[mapper[multiple_key]],
+                                                         mapper[multiple_key],outliers_report)
             else:
                 for multiple_key in multiple_features[sub_class]:
                     # check for null values
@@ -143,7 +125,8 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
                             df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna(0)
                     # check for outliers
                     if is_numeric_dtype(df[mapper[multiple_key]]) or df[mapper[multiple_key]].dtype == "datetime64[ns]":
-                        df,outliers = handle_outliers(df,df[mapper[multiple_key]],mapper[multiple_key])
+                        df,outliers_report = handle_outliers(df,df[mapper[multiple_key]],
+                                                      mapper[multiple_key],outliers_report)
 
         else:
             # check if a critical feature
@@ -153,7 +136,8 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
                     null_report["dropped"].append(mapper[mapper_key])
                     df = df[df[mapper[mapper_key]].notna()]
                 # check for outliers
-                df,outliers = handle_outliers(df,df[mapper[mapper_key]],mapper[mapper_key])
+                df,outliers_report = handle_outliers(df,df[mapper[mapper_key]],
+                                                     mapper[mapper_key],outliers_report)
             else:
                 # check for null values
                 if df[mapper[mapper_key]].isnull().sum() > 0:
@@ -169,8 +153,9 @@ def clean_null(df,mapper,multiple_features,critical=CRITICAL):
                         df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna(0)
                 # check for outliers
                 if is_numeric_dtype(df[mapper[mapper_key]]) or df[mapper[mapper_key]].dtype == "datetime64[ns]":
-                    df,outliers = handle_outliers(df,df[mapper[mapper_key]],mapper[mapper_key])
+                    df,outliers_report = handle_outliers(df,df[mapper[mapper_key]],
+                                                         mapper[mapper_key],outliers_report)
 
-            
-    return df,null_report
+    # print(outliers_report)         
+    return df,null_report,outliers_report
    
