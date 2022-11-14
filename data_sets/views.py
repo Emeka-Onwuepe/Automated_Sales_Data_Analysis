@@ -11,6 +11,7 @@ from os import path,listdir,makedirs
 from zipfile import ZipFile
 from data_sets.forms import UploadZipFileForm
 from data_sets.models import Dataset
+from source_code.clean.converter import convert_to_excel
 from source_code.clean.general import DATA_TYPE_SETTER, clean_df, create_mapper, set_data_types
 from source_code.clean.identifiers import name_issues,get_name_issues
 from source_code.sub_classes import SUB_CLASSES
@@ -31,6 +32,7 @@ def ClassifyView(request,user_id,dataset_id):
         except AttributeError:
             feature = str(feature)
         feature = feature.replace("-","_").replace(" ","_")
+        feature = feature.replace("/","_").replace("\\","_")
         new_col.append(feature)
     dataset.columns = json.dumps(new_col)
     dataset.save()
@@ -61,10 +63,10 @@ def AnalysisView(request,user_id,dataset_id):
         if not path.exists(dataset_location):
             makedirs(dataset_location)
             
-        df_file = path.join(dataset_location, 'testj.xlsx')
-        writer = pd.ExcelWriter(df_file,engine="xlsxwriter")
-        df.to_excel(writer)
-        writer.save()
+        convert_to_excel(df,dataset_location,"clean_data")
+        convert_to_excel(nulls,dataset_location,"null_values")
+        for key,value in outliers_report.items():
+            convert_to_excel(pd.DataFrame(value),dataset_location,f'{key}_outliers')
         
        
     
@@ -96,7 +98,4 @@ def AnalysisView(request,user_id,dataset_id):
                  
         
     return render(request,"data_sets/dashboard.html",{"head":df.head().to_html(), 
-                                                      "nulls": nulls.to_html(),
-                                                        # "types": df.dtypes,
-                                                        # "types": df.dtypes,
                                                         "error":error_mgs,'df':df})
