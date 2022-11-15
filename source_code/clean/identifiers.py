@@ -22,7 +22,7 @@ def clean_genders(gen):
             male = ['male', 'm']
             set_option('mode.chained_assignment',None)   
             if search('[0-9@%$/())]',data):
-                result.append('not a gender')
+                gen[i] = 'not a gender'
             elif data in female:
                 gen[i] = 'female'
             elif data in male:

@@ -81,7 +81,7 @@ def handle_outliers(df,col,col_name,outliers_report):
     IQR = Q3 - Q1
     upper = (Q3+1.5*IQR)
     lower = (Q1-1.5*IQR)
-    outliers_report["range"][col_name] = [lower,upper]
+    outliers_report["feature_ranges"][col_name] = [lower,upper]
     outliers = df.query("@col > @upper | @col < @lower")
     outliers_report[col_name] = outliers
 
@@ -91,8 +91,8 @@ def handle_outliers(df,col,col_name,outliers_report):
 
 def clean_df(df,mapper,multiple_features,handle_outliers=handle_outliers,critical=CRITICAL):
     
-    null_report = {"dropped":[],"unknown":[],"zeros":[],"ffill":[]}
-    outliers_report = {"range":{}}
+    null_report = {"dropped":[],"unknown":[],"mean":[],"ffill":[]}
+    outliers_report = {"feature_ranges":{}}
 
     for mapper_key in mapper.keys():
         # check if the key is multiple
@@ -122,7 +122,7 @@ def clean_df(df,mapper,multiple_features,handle_outliers=handle_outliers,critica
                             df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna(method = "ffill")
                         elif is_numeric_dtype(df[mapper[multiple_key]]):
                             null_report["zeros"].append(mapper[multiple_key])
-                            df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna(0)
+                            df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna(int(df[mapper[multiple_key]].mean()))
                     # check for outliers
                     if is_numeric_dtype(df[mapper[multiple_key]]) or df[mapper[multiple_key]].dtype == "datetime64[ns]":
                         df,outliers_report = handle_outliers(df,df[mapper[multiple_key]],
@@ -150,7 +150,7 @@ def clean_df(df,mapper,multiple_features,handle_outliers=handle_outliers,critica
                         df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna(method = "ffill")
                     elif is_numeric_dtype(df[mapper[mapper_key]]):
                         null_report["zeros"].append(mapper[mapper_key])
-                        df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna(0)
+                        df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna(int(df[mapper[mapper_key]].mean()))
                 # check for outliers
                 if is_numeric_dtype(df[mapper[mapper_key]]) or df[mapper[mapper_key]].dtype == "datetime64[ns]":
                     df,outliers_report = handle_outliers(df,df[mapper[mapper_key]],

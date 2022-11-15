@@ -79,23 +79,12 @@ def AnalysisView(request,user_id,dataset_id):
         with path_zip.open(mode='rb') as f:
             dataset.zipfolder = File(f,name=path_zip.name)  
             dataset.save() 
-            
-        print(dataset.zipfolder.url) 
-        
-        # default_storage.save(dataset_id,File(open(zip_location,unicode="utf-8")))
-        # zip_form = UploadZipFileForm(request.POST,request.FILES or None, instance=dataset)
-        # zip_form.instance.file = File(open(zip_location))
-        # zip_form.instance.file.name = "zipfolder"
-        # dd = zip_form.save()
-        # print(dd.columns)
-        # print(dd.zipfolder.url)
-        # if zip_form.is_valid():
-        #     print(zip_form["zipfolder"])
-        # with open(zip_location) as zip_file:   
-        #     dataset.zipfolder = File(open(zip_file))
-        #     dataset.save()
-        #     print(dataset.zipfolder)
-                 
+        print(null_report)
         
     return render(request,"data_sets/dashboard.html",{"head":df.head().to_html(), 
-                                                        "error":error_mgs,'df':df})
+                                                        "feature_ranges":outliers_report['feature_ranges'],
+                                                        "name_errors":name_errors,
+                                                        "error":error_mgs,
+                                                        "nulls":nulls,
+                                                        'null_report':null_report,
+                                                        'df':df})
