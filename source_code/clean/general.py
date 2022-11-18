@@ -156,6 +156,6 @@ def clean_df(df,mapper,multiple_features,handle_outliers=handle_outliers,critica
                     df,outliers_report = handle_outliers(df,df[mapper[mapper_key]],
                                                          mapper[mapper_key],outliers_report)
 
-    # print(outliers_report)         
+           
     return df,null_report,outliers_report
    

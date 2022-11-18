@@ -1,15 +1,12 @@
 from django.shortcuts import render
-from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
-
 from django.core.files import File
 import json
 import pandas as pd
 from pathlib import Path
-from django.conf import settings
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 from os import path,listdir,makedirs
 from zipfile import ZipFile
-from data_sets.forms import UploadZipFileForm
 from data_sets.models import Dataset
 from source_code.clean.converter import convert_to_excel
 from source_code.clean.general import DATA_TYPE_SETTER, clean_df, create_mapper, set_data_types
@@ -52,6 +49,12 @@ def AnalysisView(request,user_id,dataset_id):
         df,mapper,multiple_features,error_mgs = set_data_types(df,mapper,DATA_TYPE_SETTER)
         nulls = df[df.isnull().any(axis=1)]
         df,null_report,outliers_report = clean_df(df,mapper,multiple_features)
+        datar = nulls.dtypes.to_frame()
+        datar['Null Values'] = nulls.isnull().sum()
+        # print(data_)
+        # {"feature":nulls.dtypes.index,
+        #  "Data Type":nulls.dtypes}
+        # print(nulls.dtypes.index)
         name_errors = name_issues(df,mapper,multiple_features,get_name_issues)
         
        
@@ -67,9 +70,31 @@ def AnalysisView(request,user_id,dataset_id):
         convert_to_excel(nulls,dataset_location,"null_values")
         for key,value in outliers_report.items():
             convert_to_excel(pd.DataFrame(value),dataset_location,f'{key}_outliers')
+            
+        df_head = df.head().to_html().replace("<th></th>","<th>  </th>")
+        df_sats = df.describe().to_html().replace("<th></th>","<th>  </th>")
         
-       
-    
+        template_path = 'data_sets/cleaning_report.html'
+        context = {"head":df_head, 
+                    "feature_ranges":outliers_report['feature_ranges'],
+                    "name_errors":name_errors,
+                    "error":error_mgs,
+                    "nulls":nulls,
+                    'null_report':null_report,
+                    "df_sats":df_sats,
+                    'df':df,
+                    "data":datar}
+        # Create a Django response object, and specify content_type as pdf
+        # response = HttpResponse(content_type='application/pdf')
+        # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
+        html_to_pdf = path.join(files_location, 'cleaning_report.pdf')
+        with open(html_to_pdf, "w+b") as file:
+            pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
+        
+
         with ZipFile(zip_location,'w') as zipfile:
             files= listdir(dataset_location)
             for file in files:
@@ -79,12 +104,13 @@ def AnalysisView(request,user_id,dataset_id):
         with path_zip.open(mode='rb') as f:
             dataset.zipfolder = File(f,name=path_zip.name)  
             dataset.save() 
-        print(null_report)
         
-    return render(request,"data_sets/dashboard.html",{"head":df.head().to_html(), 
+    return render(request,"data_sets/cleaning_report.html",{"head":df_head, 
                                                         "feature_ranges":outliers_report['feature_ranges'],
                                                         "name_errors":name_errors,
                                                         "error":error_mgs,
                                                         "nulls":nulls,
                                                         'null_report':null_report,
-                                                        'df':df})
+                                                        "df_sats":df_sats,
+                                                        'df':df,
+                                                        "data":datar.to_html()})

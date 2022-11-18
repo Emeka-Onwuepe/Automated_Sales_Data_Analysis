@@ -7,7 +7,3 @@ class DataSetForm(forms.ModelForm):
         exclude = ['zipfolder',"user_id","columns"]
         
         
-class UploadZipFileForm(forms.ModelForm):
-    class Meta:
-        model = Dataset
-        fields = ['zipfolder']

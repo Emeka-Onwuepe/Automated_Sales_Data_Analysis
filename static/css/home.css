@@ -67,7 +67,9 @@ header {
     margin-bottom: 5px;
 }
 
-h1{text-align: center;}
+h1 {
+    text-align: center;
+}
 
 main {
     min-height: calc(100vh - 132px);
@@ -75,7 +77,19 @@ main {
     /* display: flex;
     align-items: center; */
     margin: 0px auto;
+    width: 100%;
+}
 
+main section {
+    margin-bottom: 20px;
+}
+
+.info {
+    margin: 5px 0px;
+}
+
+h3 {
+    margin: 3px 0px;
 }
 
 .formsection {
@@ -145,13 +159,17 @@ label[for=id_dataset_id] {
     border-radius: 50px;
     border-color: aqua;
 }
+
 .submitButton {
-	width: 120px;
-	margin-left: calc(50% - 60px);
+    width: 120px;
+    margin-left: calc(50% - 60px);
 }
 
-table{overflow:scroll;}
-td{
+table {
+    overflow: scroll;
+}
+
+td {
     border: 1px solid white;
     padding: 3px;
     text-align: center;

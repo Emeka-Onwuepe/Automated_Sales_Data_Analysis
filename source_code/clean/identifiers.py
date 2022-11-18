@@ -45,18 +45,21 @@ def get_name_issues(names):
     for name in names:
         if search('[0-9@%$/())-]',name):
             irregular_name.append(name)
+    
+    return irregular_name
 
 def name_issues(df,mapper,multiple_features,get_name_issues):
     name_errors = {}
     try:
-        name_errors[mapper["c_name"]] =  get_name_issues(df[mapper["c_name"]])
+        irregular_name = get_name_issues(df[mapper["c_name"]])
+        if irregular_name:
+            name_errors[mapper["c_name"]] =  irregular_name
         for multiple_key in multiple_features["c_name"]:
-            name_errors[mapper[multiple_key]] =  get_name_issues(df[mapper[multiple_key]])
+            irregular_name = get_name_issues(df[mapper[multiple_key]])
+            if irregular_name:
+                name_errors[mapper[multiple_key]] = irregular_name 
     except KeyError:
-        try:
-            name_errors[mapper["c_name"]] =  get_name_issues(df[mapper["c_name"]])
-        except KeyError:
-            pass
+        pass
     return name_errors
 
 def clean_age(age):

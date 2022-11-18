@@ -10,6 +10,7 @@
     </div>
 </section>
 
+{% if nulls.shape.0 > 0 %}
 <section class="null_values">
     <h3>Data Types and Null Values</h3>
     <div class="table_display" style="display: flex;flex-direction:row">
@@ -20,19 +21,13 @@
                     <th>Data Type</th>
                 </tr>
             </thead>
-            {% for index,col in nulls.dtypes.items  %}
-        <tr>
-            <td>{{index}}</td>
-            <td>{% if col == "datetime64[ns]" %}
-                    Date
-                {% elif col == "object"  %}
-              String
-            {% else %}
-              float
-            {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
+            {% for index,col in nulls.dtypes.items %}
+            <tr>
+                <td>{{index}}</td>
+                <td>{% if col == "datetime64[ns]" %} Date {% elif col == "object" %} String {% else %} float {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
         </table>
         <table>
             <thead>
@@ -40,11 +35,11 @@
                     <th>Null Values</th>
                 </tr>
             </thead>
-            {% for col in nulls.isnull.sum  %}
-        <tr>
-            <td>{{col}}</td>
-        </tr>
-        {% endfor %}
+            {% for col in nulls.isnull.sum %}
+            <tr>
+                <td>{{col}}</td>
+            </tr>
+            {% endfor %}
         </table>
     </div>
     <p class="info">You can see all the affected row in the null_values excel file </p>
@@ -52,40 +47,23 @@
     <h3>Null Cleaning</h3>
     <div>
         {% if null_report.dropped %}
-        <p>We dropped all the null values in  {% for feature in null_report.dropped  %}
-            {{feature}},
-            {% endfor %}</p>
-        {% endif %}
-
-        {% if null_report.mean %}
-        <p>Null values in {% for feature in null_report.mean  %}
-            {{feature}},
-            {% endfor %} were filled with their mean/average values</p>
-        {% endif %}
-
-
-        {% if null_report.ffill %}
-         <p>Valid value that comes before null value(s) was used to fill up the null value(s) in 
-            {% for feature in null_report.ffill  %}
-                {{feature}},
-                {% endfor %} </p>
-        {% endif %}
-
-        {% if null_report.unknown %}
-        <p>All the null values in {% for feature in null_report.unknown  %}
-            {{feature}},
-            {% endfor %} were filled with the word "unknown"</p>
+        <p>We dropped all the null values in {% for feature in null_report.dropped %} {{feature}}, {% endfor %}</p>
+        {% endif %} {% if null_report.mean %}
+        <p>Null values in {% for feature in null_report.mean %} {{feature}}, {% endfor %} were filled with their mean/average values</p>
+        {% endif %} {% if null_report.ffill %}
+        <p>Valid value that comes before null value(s) was used to fill up the null value(s) in {% for feature in null_report.ffill %} {{feature}}, {% endfor %} </p>
+        {% endif %} {% if null_report.unknown %}
+        <p>All the null values in {% for feature in null_report.unknown %} {{feature}}, {% endfor %} were filled with the word "unknown"</p>
         {% endif %}
     </div>
 </section>
+{% endif %}
 
 <section class="outliers">
     <h3>Quantitative Feature Ranges</h3>
-    <p class="info"> Data points that does not fall within the min and max 
-        are generally regarded as outliers and are meant to be removed but they were not removed in this
-    analysis. Each feature outlier were recored in an excel file suffix with '_outlier' </p>
+    <p class="info"> Data points that does not fall within the min and max are generally regarded as outliers and are meant to be removed but they were not removed in this analysis. Each feature outlier were recored in an excel file suffix with '_outlier' </p>
 
-    
+
     <div style="display: flex;flex-direction:row">
         <table>
             <thead>
@@ -96,7 +74,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for  key,value in feature_ranges.items  %}
+                {% for key,value in feature_ranges.items %}
                 <tr>
                     <td>{{key}}</td>
                     <td>{{value.0}}</td>
@@ -105,53 +83,71 @@
                 {% endfor %}
             </tbody>
         </table>
-    
+
     </div>
 </section>
 
+{% if name_errors %}
+<section class="name_errors">
+    {% for key,values in name_errors.items %}
+    <div>
+        <p>We noticed an irregular name in {{key}} feature</p>
+        <div class="flex_container" style="display: flex;flex-direction:row">
+            {% for name in values %}
+            <p class="irregular_names">{{name}}</p>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    {% endfor %}
+
+</section>
+{% endif %}
+
 <section class="cleaned">
     <h3>Cleaned Dataset Datatypes and Null Values</h3>
-<div style="display: flex;flex-direction:row">
-    <table>
-        <thead>
-            <tr>
-                <th>Feature</th>
-                <th>Data Type</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for index,col in df.dtypes.items  %}
-    <tr>
-        <td>{{index}}</td>
-        <td>{% if col == "datetime64[ns]" %}
-                Date
-            {% elif col == "object"  %}
-          String
-        {% else %}
-          float
-        {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</tbody>
-    </table>
-    <table>
-        <thead>
-            <tr>
-                <th>Null Values</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for col in df.isnull.sum  %}
-    <tr>
-        <td>{{col}}</td>
-    </tr>
-    {% endfor %}
-</tbody>
-    </table>
-</div>
+    <div style="display: flex;flex-direction:row">
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Data Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index,col in df.dtypes.items %}
+                <tr>
+                    <td>{{index}}</td>
+                    <td>{% if col == "datetime64[ns]" %} Date {% elif col == "object" %} String {% else %} float {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>Null Values</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for col in df.isnull.sum %}
+                <tr>
+                    <td>{{col}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 </section>
 
+<section class="df_describe">
+    <h3>Statistical Summary</h3>
+    <div class="table_display" style="overflow:scroll;">
+        {{df.describe.to_html|safe}}
+    </div>
+</section>
 
 {% endblock main %}

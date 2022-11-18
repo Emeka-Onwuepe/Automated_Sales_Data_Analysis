@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        main,
+        header,
+        section,
+        aside,
+        article,
+        nav,
+        footer {
+            display: block;
+        }
+        
+        .bigwrapper {
+            display: flex;
+            flex-direction: column;
+            margin: 0px 10px;
+            align-content: center;
+            background-color: #201c1c;
+        }
+        
+        header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: calc(100% - 20px);
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        main {
+            min-height: calc(100vh - 132px);
+            background-color: #201c1c;
+            /* display: flex;
+            align-items: center; */
+            margin: 0px auto;
+            width: 100%;
+        }
+        
+        main section {
+            margin-bottom: 20px;
+        }
+        
+        .info {
+            margin: 5px 0px;
+        }
+        
+        h3 {
+            margin: 3px 0px;
+        }
+        
+        .formsection {
+            display: flex;
+            justify-content: center;
+            margin: 10px;
+        }
+        
+        table,
+        td,
+        tr,
+        th {
+            border: 2px solid black;
+            padding: 3px;
+        }
+        
+        h3,
+        h3 a {
+            font-size: 15.75px;
+            font-weight: bold;
+        }
+        
+        h2 {
+            font-size: 17.72px;
+        }
+        
+        h1 {
+            font-size: 19.94px;
+            font-weight: bold;
+        }
+    </style>
+    <title> Cleaning Report</title>
+</head>
+
+<body>
+    <h1>Cleaning Report</h1>
+    <P class="info">{% if error.out_of_bound %}We dropped {% for feature in error.out_of_bound %} {% if forloop.last and forloop.first %} {{feature}} {% elif forloop.last and not forloop.first %} and {{feature}} {% else %} {{feature}} , {% endif %} {% endfor %} because
+        we were unable to convert {% if error.out_of_bound|length == 1 %} it {% else %} them {% endif %} to date datatype.{% endif %}
+    </P>
+    <section class="df_head">
+        <div class="table_display" style="overflow:scroll;">
+            {{head|safe}}
+        </div>
+    </section>
+    <section class="df_head">
+        <h3>Deeeeee</h3>
+        <div class="table_display" style="overflow:scroll;">
+            {{data|safe}}
+        </div>
+    </section>
+
+    {% if nulls.shape.0 > 0 %}
+    <section class="null_values">
+        <h3>Data Types and Null Values</h3>
+        <div class="table_display" style="display: flex;flex-direction:row">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Data Type</th>
+                    </tr>
+                </thead>
+                {% for index,col in nulls.dtypes.items %}
+                <tr>
+                    <td>{{index}}</td>
+                    <td>{% if col == "datetime64[ns]" %} Date {% elif col == "object" %} String {% else %} float {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Null Values</th>
+                    </tr>
+                </thead>
+                {% for col in nulls.isnull.sum %}
+                <tr>
+                    <td>{{col}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <p class="info">You can see all the affected row in the null_values excel file </p>
+
+        <h3>Null Cleaning</h3>
+        <div>
+            {% if null_report.dropped %}
+            <p>We dropped all the null values in {% for feature in null_report.dropped %} {{feature}}, {% endfor %}</p>
+            {% endif %} {% if null_report.mean %}
+            <p>Null values in {% for feature in null_report.mean %} {{feature}}, {% endfor %} were filled with their mean/average values</p>
+            {% endif %} {% if null_report.ffill %}
+            <p>Valid value that comes before null value(s) was used to fill up the null value(s) in {% for feature in null_report.ffill %} {{feature}}, {% endfor %} </p>
+            {% endif %} {% if null_report.unknown %}
+            <p>All the null values in {% for feature in null_report.unknown %} {{feature}}, {% endfor %} were filled with the word "unknown"</p>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+
+    <section class="outliers">
+        <h3>Quantitative Feature Ranges</h3>
+        <p class="info"> Data points that does not fall within the min and max are generally regarded as outliers and are meant to be removed but they were not removed in this analysis. Each feature outlier were recored in an excel file suffix with '_outlier' </p>
+
+
+        <div style="display: flex;flex-direction:row">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Min</th>
+                        <th>Max</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key,value in feature_ranges.items %}
+                    <tr>
+                        <td>{{key}}</td>
+                        <td>{{value.0}}</td>
+                        <td>{{value.1}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </section>
+
+    {% if name_errors %}
+    <section class="name_errors">
+        {% for key,values in name_errors.items %}
+        <div>
+            <p>We noticed an irregular name in {{key}} feature</p>
+            <div class="flex_container" style="display: flex;flex-direction:row">
+                {% for name in values %}
+                <p class="irregular_names">{{name}}</p>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </section>
+    {% endif %}
+
+    <section class="cleaned">
+        <h3>Cleaned Dataset Datatypes and Null Values</h3>
+        <div style="display: flex;flex-direction:row">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Data Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index,col in df.dtypes.items %}
+                    <tr>
+                        <td>{{index}}</td>
+                        <td>{% if col == "datetime64[ns]" %} Date {% elif col == "object" %} String {% else %} float {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <table>
+                <thead style="display: inline;">
+                    <tr>
+                        <th>Null Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for col in df.isnull.sum %}
+                    <tr>
+                        <td>{{col}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+    <section class="df_describe">
+        <h3>Statistical Summary</h3>
+        <div class="table_display" style="overflow:scroll;">
+            {{df_sats|safe}}
+        </div>
+        <p>The cleaned dataset is saved as clean.xlsx </p>
+    </section>
+
+
+</body>
+
+</html>
