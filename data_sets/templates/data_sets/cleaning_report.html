@@ -56,22 +56,12 @@
             width: 100%;
         }
         
-        main section {
-            margin-bottom: 20px;
+        section {
+            margin: 0px 10px;
         }
         
         .info {
-            margin: 5px 0px;
-        }
-        
-        h3 {
-            margin: 3px 0px;
-        }
-        
-        .formsection {
-            display: flex;
-            justify-content: center;
-            margin: 10px;
+            margin: 1px 0px;
         }
         
         table,
@@ -80,7 +70,9 @@
         th {
             border: 2px solid black;
             padding: 3px;
+            word-wrap: break-word;
         }
+        
         
         h3,
         h3 a {
@@ -102,18 +94,22 @@
 
 <body>
     <h1>Cleaning Report</h1>
-    <P class="info">{% if error.out_of_bound %}We dropped {% for feature in error.out_of_bound %} {% if forloop.last and forloop.first %} {{feature}} {% elif forloop.last and not forloop.first %} and {{feature}} {% else %} {{feature}} , {% endif %} {% endfor %} because
-        we were unable to convert {% if error.out_of_bound|length == 1 %} it {% else %} them {% endif %} to date datatype.{% endif %}
-    </P>
+
+    <section class="section">
+        <P class="info">{% if error.out_of_bound %}We dropped {% for feature in error.out_of_bound %} {% if forloop.last and forloop.first %} {{feature}} {% elif forloop.last and not forloop.first %} and {{feature}} {% else %} {{feature}} , {% endif %} {% endfor %} because
+            we were unable to convert {% if error.out_of_bound|length == 1 %} it {% else %} them {% endif %} to date datatype.{% endif %}
+        </P>
+    </section>
+
     <section class="df_head">
-        <div class="table_display" style="overflow:scroll;">
+        <div class="table_display">
             {{head|safe}}
         </div>
     </section>
     <section class="df_head">
-        <h3>Deeeeee</h3>
-        <div class="table_display" style="overflow:scroll;">
-            {{data|safe}}
+        <h3>Null Table</h3>
+        <div class="table_display">
+            {{null_table|safe}}
         </div>
     </section>
 
@@ -252,7 +248,7 @@
 
     <section class="df_describe">
         <h3>Statistical Summary</h3>
-        <div class="table_display" style="overflow:scroll;">
+        <div class="table_display">
             {{df_sats|safe}}
         </div>
         <p>The cleaned dataset is saved as clean.xlsx </p>
