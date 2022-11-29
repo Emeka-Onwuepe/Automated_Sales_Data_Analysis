@@ -25,6 +25,7 @@ padding = dict(
 landscape_frame = Frame(0, 0, *landscape(A4), **padding)
 
 def on_page(canvas, doc, pagesize=A4):
+    # canvas.setFont('Times-Roman',14)
     page_num = canvas.getPageNumber()
     canvas.drawCentredString(pagesize[0]/2, 50, str(page_num))
 
@@ -46,8 +47,14 @@ def fig2image(f):
     buf.seek(0)
     x, y = f.get_size_inches()
     return Image(buf, x * inch, y * inch)
+ 
+from reportlab.lib.styles import getSampleStyleSheet 
+styles = getSampleStyleSheet()
+p_style2 = styles["Normal"]
+p_style2.fontSize = 11
+p_style2.alignment = 1
 
-def df2table(df):
+def df2table(df,p_style=p_style2):
     length = 9
     df = df.astype("str")
     row_len,col_len = df.shape
@@ -59,11 +66,11 @@ def df2table(df):
           df['...'] = ["..."] * row_len
           colwidths.append(0.5 * inch)
     
-    head = [[Paragraph(col) for col in df.columns]]
+    head = [[Paragraph(col,p_style) for col in df.columns]]
     body =  df.values.tolist()
     body_arr = []
     for arr in body:
-          arr_data = [Paragraph(cell) for cell in arr]
+          arr_data = [Paragraph(cell,p_style) for cell in arr]
           body_arr.append(arr_data)
     
     data = head + body_arr
@@ -75,5 +82,18 @@ def df2table(df):
         ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
         ('BOX', (0,0), (-1,-1), 1, colors.black),
         ('ROWBACKGROUNDS', (0,0), (-1,-1), [colors.lightgrey, colors.white])],
-      hAlign = 'LEFT',colWidths=colwidths)
+      hAlign = 'LEFT',colWidths=colwidths,spaceBefore=10,)
+    
+def list_to_string(arr):
+  is_plural = True
+  string = None
+  length = len(arr)
+  if length < 2:
+    is_plural = False
+    string = arr[0]
+  elif length > 1:
+        arr.insert(length-1,"and,")
+        string = ', '.join(arr)
+        string = string.replace(",,",'')
+  return string,is_plural
     

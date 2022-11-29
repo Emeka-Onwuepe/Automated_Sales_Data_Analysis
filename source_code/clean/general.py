@@ -1,6 +1,7 @@
 
 from pandas.errors import OutOfBoundsDatetime
 from pandas.api.types import is_numeric_dtype
+from pandas import DataFrame
 from numpy import percentile
 from re import search
 from source_code.sub_classes import CRITICAL
@@ -92,7 +93,7 @@ def handle_outliers(df,col,col_name,outliers_report):
 def clean_df(df,mapper,multiple_features,handle_outliers=handle_outliers,critical=CRITICAL):
     
     null_report = {"dropped":[],"unknown":[],"mean":[],"ffill":[]}
-    outliers_report = {"feature_ranges":{}}
+    outliers_report = {"feature_ranges":{"range":["Min","Max"]}}
 
     for mapper_key in mapper.keys():
         # check if the key is multiple
@@ -158,4 +159,15 @@ def clean_df(df,mapper,multiple_features,handle_outliers=handle_outliers,critica
 
            
     return df,null_report,outliers_report
+
+
+def get_null_table(df):
+    nulls = df[df.isnull().any(axis=1)]
+    null_types = nulls.dtypes
+    null_table = DataFrame({ "Features": null_types.index,
+                                   "Data Types": null_types,
+                                    "Null Values": nulls.isnull().sum()
+                                })
+    return null_table
+        
    
