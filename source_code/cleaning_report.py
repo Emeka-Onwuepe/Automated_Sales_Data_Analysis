@@ -11,9 +11,9 @@ def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
                         null_table_cleaned,name_errors,dataset_location):
     
     file_name = path.join(dataset_location,"cleaning_report.pdf")
-    
+
     doc = BaseDocTemplate(
-            "cleaning_report.pdf",
+            file_name,
             pageTemplates=[
             landscape_template
             ]
@@ -88,6 +88,7 @@ def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
   
     story.append(Paragraph("Statistical Summary",heading2))
     story.append(df2table(df.describe()))
+    story.append(Paragraph("The image format is saved as statistical_summary.png"))
     story.append(Paragraph("The cleaned dataset is saved as clean.xlsx"))
     
     doc.build(story)

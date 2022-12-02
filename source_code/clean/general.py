@@ -168,6 +168,6 @@ def get_null_table(df):
                                    "Data Types": null_types,
                                     "Null Values": nulls.isnull().sum()
                                 })
-    return null_table
+    return null_table,nulls
         
    

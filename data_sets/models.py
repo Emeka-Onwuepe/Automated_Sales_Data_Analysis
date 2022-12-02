@@ -14,6 +14,7 @@ class Dataset(models.Model):
     currency_symbol = models.CharField("currency symbol",blank=False,max_length = 10) 
     zipfolder = models.FileField("zipfolder",blank=True)
     columns = models.TextField("columns",blank=True)
+    created = models.DateTimeField("created",auto_now_add = True)
     
     class Meta:
         """Meta definition for Dataset."""
