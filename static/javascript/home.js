@@ -41,13 +41,19 @@ const createDataId = () => {
 
 try {
     let dataset = document.querySelector("#id_dataset")
-    dataset.accept = ".csv,.xlsx"
     let dataset_id = document.querySelector("#id_dataset_id")
-    dataset_id.value = createDataId()
     let user_id = document.querySelector("#id_user_id")
-    user_id.value = state.user
+    let user_id2 = document.querySelector("#id_user_id2")
+
+    dataset.accept = ".csv,.xlsx"
+    dataset_id.value = createDataId()
     dataset_id.style.display = "none"
+
+    user_id.value = state.user
     user_id.style.display = "none"
+
+    user_id2.value = state.user
+
 } catch (error) {
     console.log(error)
 }

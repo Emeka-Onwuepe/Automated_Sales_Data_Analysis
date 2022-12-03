@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render,reverse
+from django.http import HttpResponseRedirect
 from django.core.files import File
 import json
 import pandas as pd
@@ -20,7 +21,15 @@ from source_code.cleaning_report import create_cleaning_pdf
 files_location = path.join(".", 'datasets')
 
 # Create your views here.
-def ClassifyView(request,user_id,dataset_id):
+def ClassifyView(request,dataset_id):
+    
+    user_id = None
+    try:
+        user_id = request.session["user_id"]
+    except KeyError:
+       return HttpResponseRedirect(reverse('frontview:homeView'))
+  
+    
     df,dataset = read_dataset(Dataset,user_id,dataset_id,pd)
     column = df.columns
     new_col = []
@@ -36,9 +45,17 @@ def ClassifyView(request,user_id,dataset_id):
     dataset.columns = json.dumps(new_col)
     dataset.save()
     return render(request,'data_sets/classify.html',{"column":new_col,"sub_classes":SUB_CLASSES,
-                                                    "user_id":user_id,"dataset_id":dataset_id})
+                                                    "dataset_id":dataset_id})
 
-def AnalysisView(request,user_id,dataset_id):
+def AnalysisView(request,dataset_id):
+    
+    user_id = None
+    try:
+        user_id = request.session["user_id"]
+    except KeyError:
+       return HttpResponseRedirect(reverse('frontview:homeView'))
+    
+    
     if request.method == "POST":
         data = dict(request.POST)
         del data['csrfmiddlewaretoken']
@@ -95,14 +112,36 @@ def AnalysisView(request,user_id,dataset_id):
         if path.exists(files_location):
             rmtree(path.join(dataset_location))
             remove(zip_location)
-            
-        
-    return render(request,"data_sets/cleaning_report.html")
+                 
+    return HttpResponseRedirect(reverse('process:dashboardView'))
 
 
     
-def dashboard_view(request,user_id):
-    if request.method == "POST":
+def dashboardView(request):
+    
+    user_id = None
+    try:
+        user_id = request.session["user_id"]
+    except KeyError:
+        if request.method != "POST":
+            return HttpResponseRedirect(reverse('frontview:homeView'))
+    
+    if request.method == "POST" or user_id:
         time_out = timezone.now() - timedelta(hours=3)
         old_data = Dataset.objects.filter( created__lte = time_out)
         old_data.delete()
+          
+        datasets = Dataset.objects.filter(user_id__user_id = user_id)
+        return render(request,'data_sets/dashboard.html',{"dataset":datasets})
+        
+def deleteView(request,dataset_id):
+    
+    try:
+        dataset = Dataset.objects.get(id=dataset_id)
+        dataset.delete()
+    except Dataset.DoesNotExist:
+        pass
+    
+    return HttpResponseRedirect(reverse('process:dashboardView'))
+    
+      

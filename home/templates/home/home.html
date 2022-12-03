@@ -23,7 +23,7 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
     <div class="bigwrapper">
-        
+
         {% block head %}
         <header>
             <section class="logo">
@@ -32,11 +32,18 @@
                 </a>
             </section>
             <nav>
+                <div>
+                    <form action="{% url 'process:dashboardView' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_id" id="id_user_id2">
+                        <button type="submit">Dashboard</button>
+                    </form>
+                </div>
 
             </nav>
         </header>
         {% endblock head %}
-            
+
         <div class="sperator"></div>
         <main>
             {% block main %}

@@ -6,6 +6,7 @@ from users.models import User_id
 
 # Create your views here.
 def homeView(request):
+  
     form = DataSetForm()
     if request.method == "POST":
         user_id = None
@@ -27,6 +28,13 @@ def homeView(request):
         #     save form
         if form.is_valid():
             form.save()
+            try:
+                if request.session['user_id']:
+                    del request.session['user_id']
+                request.session['user_id'] = str(dataset.user_id)
+            except KeyError:
+                pass
+            
             return HttpResponseRedirect(reverse('process:classifyView',
-                        kwargs={"user_id":dataset.user_id,"dataset_id":dataset.dataset_id}))          
+                        kwargs={"dataset_id":dataset.dataset_id}))          
     return render(request,'home/home.html',{"form":form})
