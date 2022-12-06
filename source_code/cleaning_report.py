@@ -90,6 +90,5 @@ def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
     story.append(df2table(df.describe()))
     story.append(Paragraph("The image format is saved as statistical_summary.png"))
     story.append(Paragraph("The cleaned dataset is saved as clean.xlsx"))
-    
     doc.build(story)
        

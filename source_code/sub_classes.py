@@ -16,3 +16,6 @@ SUB_CLASSES =  {'Stock Date':'stock_date','Sales Date':'sales_date',
 
 CRITICAL = ["unit_cp","sp","discount_per","discount_amount","qty_sold",
             "pro_cost","sp_dis"]
+
+CAT_UNIVARIATS = ['gender',"p_cat","sales_grouping",'payment_status','delivered',
+                  "del_location","c_grouping",'c_region']

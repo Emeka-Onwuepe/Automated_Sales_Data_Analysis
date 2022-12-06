@@ -30,11 +30,10 @@ def homeView(request):
             form.save()
             try:
                 if request.session['user_id']:
-                    del request.session['user_id']
-                request.session['user_id'] = str(dataset.user_id)
+                    del request.session['user_id']   
             except KeyError:
                 pass
-            
+            request.session['user_id'] = str(dataset.user_id)
             return HttpResponseRedirect(reverse('process:classifyView',
                         kwargs={"dataset_id":dataset.dataset_id}))          
     return render(request,'home/home.html',{"form":form})

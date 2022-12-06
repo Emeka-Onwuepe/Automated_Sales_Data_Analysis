@@ -49,13 +49,14 @@ header {
     z-index: 5;
     background-color: #040303;
     border-bottom: 1px dotted white;
+    padding: 0px 10px;
 }
 
 .logo h1 {
     /* color: white; */
     padding: 3px;
     border: 1px solid aqua;
-    margin: 10px;
+    margin: 10px 0px;
 }
 
 .logo em {
@@ -158,6 +159,14 @@ label[for=id_dataset_id] {
     color: #040303;
     border-radius: 50px;
     border-color: aqua;
+}
+
+.navbutton {
+    background-color: #000;
+    color: white;
+    border-color: white;
+    border-radius: 50px;
+    padding: 4px;
 }
 
 .submitButton {

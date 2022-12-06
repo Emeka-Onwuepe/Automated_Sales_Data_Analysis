@@ -7,7 +7,7 @@ from re import search
 def clean_identifiers(indentifier):
     indentifier = indentifier.fillna(nan)
     indentifier =  indentifier.astype('str')
-    indentifier = indentifier.apply(lambda data:data.strip())
+    indentifier = indentifier.apply(lambda data:data.strip().lower())
     indentifier = indentifier.replace("nan",nan)
     return indentifier
 

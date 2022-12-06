@@ -48,6 +48,7 @@ landscape_template = PageTemplate(
 def fig2image(f):
     buf = BytesIO()
     f.savefig(buf, format='png', dpi=300)
+    
     buf.seek(0)
     x, y = f.get_size_inches()
     return Image(buf, x * inch, y * inch)

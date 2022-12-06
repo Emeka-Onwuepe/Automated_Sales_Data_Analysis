@@ -4,15 +4,16 @@ from django.core.files import File
 import json
 import pandas as pd
 from pathlib import Path
-from os import path,listdir,makedirs,remove
-from shutil import rmtree
-from zipfile import ZipFile
+from os import path,makedirs,remove
+from shutil import rmtree,make_archive
 from datetime import timedelta
 from django.utils import timezone
 from data_sets.models import Dataset
 from source_code.converter import convert_df_to_image, convert_to_excel
-from source_code.clean.general import DATA_TYPE_SETTER, clean_df, create_mapper, get_null_table, set_data_types
+from source_code.clean.general import (DATA_TYPE_SETTER, clean_df, create_mapper, 
+                                       get_null_table, set_data_types)
 from source_code.clean.identifiers import name_issues,get_name_issues
+from source_code.report import create_report_pdf
 from source_code.sub_classes import SUB_CLASSES
 from source_code.read_file import read_dataset
 from source_code.cleaning_report import create_cleaning_pdf
@@ -27,6 +28,7 @@ def ClassifyView(request,dataset_id):
     try:
         user_id = request.session["user_id"]
     except KeyError:
+       print('no session found')
        return HttpResponseRedirect(reverse('frontview:homeView'))
   
     
@@ -77,32 +79,36 @@ def AnalysisView(request,dataset_id):
         null_table_cleaned,_ = get_null_table(df)
         
         dataset_location = path.join(files_location,dataset_id)
-          
+        excels_location =  path.join(dataset_location,'excels')
+        pngs_location =  path.join(dataset_location,'pngs')
         zip_name = f'{dataset_id}.zip'
         zip_location = path.join(files_location,zip_name)
+        zip_folder = path.join(files_location,dataset_id)
         if not path.exists(files_location):
             makedirs(files_location)
         if not path.exists(dataset_location):
             makedirs(dataset_location)
+            makedirs(excels_location)
+            makedirs(pngs_location)
 
             
         create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
                             null_table_cleaned,name_errors,dataset_location
                             )
-               
-            
-        convert_to_excel(df,dataset_location,"clean_data")
-        convert_to_excel(affected_nulls,dataset_location,"null_values")
-        for key,value in outliers_report.items():
-            convert_to_excel(pd.DataFrame(value),dataset_location,f'{key}_outliers')
-         
-        convert_df_to_image(df.head(),dataset_location,'data_head')
-        convert_df_to_image(df.describe(),dataset_location,'statistical_summary')
         
-        with ZipFile(zip_location,'w') as zipfile:
-            files= listdir(dataset_location)
-            for file in files:
-                zipfile.write(path.join(dataset_location,file))
+        create_report_pdf(df,dataset.report_title,dataset_location,
+                          pngs_location,excels_location,mapper)       
+        
+        convert_to_excel(df,dataset_location,"clean_data")
+        convert_to_excel(affected_nulls,excels_location,"null_values")
+        for key,value in outliers_report.items():
+            convert_to_excel(pd.DataFrame(value),excels_location,f'{key}_outliers')
+         
+        convert_df_to_image(df.head(),pngs_location,'data_head')
+        convert_df_to_image(df.describe(),pngs_location,'statistical_summary')
+        
+        
+        make_archive(zip_folder,'zip',dataset_location)
         
         path_zip = Path(zip_location)    
         with path_zip.open(mode='rb') as f:
