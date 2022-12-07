@@ -9,7 +9,7 @@ from shutil import rmtree,make_archive
 from datetime import timedelta
 from django.utils import timezone
 from data_sets.models import Dataset
-from source_code.converter import convert_df_to_image, convert_to_excel
+from source_code.converter import  convert_to_excel
 from source_code.clean.general import (DATA_TYPE_SETTER, clean_df, create_mapper, 
                                        get_null_table, set_data_types)
 from source_code.clean.identifiers import name_issues,get_name_issues
@@ -104,8 +104,10 @@ def AnalysisView(request,dataset_id):
         for key,value in outliers_report.items():
             convert_to_excel(pd.DataFrame(value),excels_location,f'{key}_outliers')
          
-        convert_df_to_image(df.head(),pngs_location,'data_head')
-        convert_df_to_image(df.describe(),pngs_location,'statistical_summary')
+        summary_sat = df.describe().reset_index()
+        summary_sat.rename({"index":"statistics"},axis=1,inplace=True)
+        
+        convert_to_excel(summary_sat,excels_location,'statistical_summary')
         
         
         make_archive(zip_folder,'zip',dataset_location)

@@ -1,4 +1,5 @@
 from email import header
+from pandas import DataFrame
 from reportlab.platypus import PageBreak,BaseDocTemplate
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import  Paragraph   
@@ -44,7 +45,6 @@ def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
         
     story.append(Paragraph(content,p_style))
     story.append(df2table(df.head()))
-    story.append(Paragraph("The image format is saved as data_head.png"))
     
     if null_table.shape[0]:
         story.append(Paragraph('Null Table', heading2))
@@ -69,7 +69,12 @@ def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
             string,is_plural = list_to_string(null_report['unknown'])
             content = f"<bullet>&bull;</bullet>All null values in {string} were filled with the word 'unknown'."
             story.append(Paragraph(content,p_style))
-      
+    story.append(Paragraph('Number of Unique values', heading2))
+    unique = df.nunique()
+    unique_df = DataFrame({"features":unique.index,
+                              "count": unique})
+    story.append(df2table(unique_df))
+    
     story.append(Paragraph('Quantitative Feature Ranges', heading2))
     content = "Data points that does not fall within the min and max are generally \
     regarded as outliers and are meant to be removed but they were not removed in this analysis. \
@@ -87,8 +92,9 @@ def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
     story.append(df2table(null_table_cleaned))
   
     story.append(Paragraph("Statistical Summary",heading2))
-    story.append(df2table(df.describe()))
-    story.append(Paragraph("The image format is saved as statistical_summary.png"))
-    story.append(Paragraph("The cleaned dataset is saved as clean.xlsx"))
+    summary_sat = df.describe().reset_index()
+    summary_sat.rename({"index":"statistics"},axis=1,inplace=True)
+    story.append(df2table(summary_sat))
+    story.append(Paragraph("This is saved as statistical_summary.xlsx and the cleaned dataset is saved as clean.xlsx"))
     doc.build(story)
        
