@@ -42,8 +42,8 @@ def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
         string,is_plural = list_to_string(error_mgs['out_of_bound'])
         # identifier = "them" if is_plural else "it"
         content = f"we were unable to convert {string} to date datatype."
+        story.append(Paragraph(content,p_style))
         
-    story.append(Paragraph(content,p_style))
     story.append(df2table(df.head()))
     
     if null_table.shape[0]:
