@@ -42,6 +42,6 @@ def create_report_pdf(df,report_heading,dataset_location,
     for col in cat_features.columns: 
         fig,info_df = feature_uniques_percentage(cat_features,col,pngs_location)
         story.append(fig2image(fig))
-        # story.append(Paragraph(" ".join(info_df),p_style))
+        story.append(Paragraph(" ".join(info_df),p_style))
     doc.build(story)
        
