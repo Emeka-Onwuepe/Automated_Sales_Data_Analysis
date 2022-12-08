@@ -1,4 +1,3 @@
-from email import header
 from pandas import DataFrame
 from reportlab.platypus import PageBreak,BaseDocTemplate
 from reportlab.lib.styles import getSampleStyleSheet
@@ -10,7 +9,6 @@ from source_code.converter import  df2table,landscape_template,list_to_string
         
 def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
                         null_table_cleaned,name_errors,dataset_location):
-    
     file_name = path.join(dataset_location,"cleaning_report.pdf")
 
     doc = BaseDocTemplate(
@@ -40,8 +38,13 @@ def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
     
     if error_mgs['out_of_bound']:
         string,is_plural = list_to_string(error_mgs['out_of_bound'])
-        # identifier = "them" if is_plural else "it"
-        content = f"we were unable to convert {string} to date datatype."
+        identifier = "them" if is_plural else "it"
+        content = f"We dropped {string} because we were unable to convert {identifier} to date datatype. "
+        if error_mgs['year_only']:
+            string,is_plural = list_to_string(error_mgs['year_only'])
+            identifier = ['they','contain'] if is_plural else ['it',"contains"]
+            content2 = f"We also dropped {string} as {identifier[0]} only {identifier[1]} year."
+            content += content2
         story.append(Paragraph(content,p_style))
         
     story.append(df2table(df.head()))

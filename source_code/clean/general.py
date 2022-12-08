@@ -5,7 +5,7 @@ from pandas import DataFrame
 from numpy import percentile
 from re import search
 from source_code.sub_classes import CRITICAL
-from .date import clean_date
+from .date import clean_date, handle_multiple_sales_date
 from .sales import clean_sale_column
 from .confirmations import delivery
 from .identifiers import clean_age, clean_identifiers,clean_genders
@@ -54,7 +54,6 @@ def set_data_types(df,mapper,set_data_data):
             sub_class,__ = mapper_key.split('&#&')
         
             try:
-                multiple_features[sub_class]
                 multiple_features[sub_class].append(mapper_key)
             except KeyError:
                 multiple_features[sub_class] = [mapper_key]
@@ -71,6 +70,18 @@ def set_data_types(df,mapper,set_data_data):
                 sub_class,__ = mapper_key.split('&#&')
                 idx = multiple_features[sub_class].index(mapper_key)
                 multiple_features[sub_class].pop(idx)
+                
+
+    # check for multiple sales date
+    try:
+        year_only,df,new_mapper,multiple_features = handle_multiple_sales_date(df,
+                                                         multiple_features["sales_date"],new_mapper,
+                                                         multiple_features)
+        error_mgs["year_only"] = year_only
+    except KeyError:
+        pass
+    
+ 
     return df,new_mapper,multiple_features,error_mgs
 
 
