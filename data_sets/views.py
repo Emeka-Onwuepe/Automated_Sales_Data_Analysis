@@ -28,7 +28,6 @@ def ClassifyView(request,dataset_id):
     try:
         user_id = request.session["user_id"]
     except KeyError:
-       print('no session found')
        return HttpResponseRedirect(reverse('frontview:homeView'))
   
     
@@ -97,7 +96,7 @@ def AnalysisView(request,dataset_id):
                             )
         
         create_report_pdf(df,dataset.report_title,dataset_location,
-                          pngs_location,excels_location,mapper)       
+                          pngs_location,excels_location,mapper,multiple_features)       
         
         convert_to_excel(df,dataset_location,"clean_data")
         convert_to_excel(affected_nulls,excels_location,"null_values")

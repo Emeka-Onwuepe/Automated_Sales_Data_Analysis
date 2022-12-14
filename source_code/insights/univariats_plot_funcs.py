@@ -21,9 +21,7 @@ def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location,info_df=
         pngs_location: path
         ylim: boolean
     
-    '''
-    graph_type='bar'
-    
+    '''    
    
     fig,ax = plt.subplots(dpi=300,figsize = [12, 5])
     plt.subplots_adjust(bottom=0.30)
@@ -36,7 +34,7 @@ def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location,info_df=
         rows,_ = df.shape
         if  rows < 5 and rows > 1:
             graph_type = "pie"
-            df.plot.pie(subplots=True)
+            df.plot.pie(subplots=True,ax=ax)
         elif rows >= 5 :
             df.plot.bar(rot=0,width=0.8,edgecolor="black",color=sns.color_palette()[:10],ax=ax)
         else:

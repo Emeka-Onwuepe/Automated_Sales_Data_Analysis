@@ -4,13 +4,15 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import  Paragraph   
 from os import path
 from source_code.converter import  df2table,landscape_template,list_to_string,fig2image
+from source_code.insights.time_series import average_sales, plot_time_series_graphs
 from source_code.insights.univariats_plot_funcs import feature_uniques_percentage
-from source_code.sub_classes import CAT_UNIVARIATS
+from source_code.sub_classes import TIME_SEERIES_VAL
+
 
         
         
 def create_report_pdf(df,report_heading,dataset_location,
-                      pngs_location,excels_location,mapper):
+                      pngs_location,excels_location,mapper,multiple_features):
     
     file_name = path.join(dataset_location,"report.pdf")
 
@@ -43,5 +45,11 @@ def create_report_pdf(df,report_heading,dataset_location,
         fig,info_df = feature_uniques_percentage(cat_features,col,pngs_location)
         story.append(fig2image(fig))
         story.append(Paragraph(" ".join(info_df),p_style))
+    
+    
+    for period in ["d",'m']:
+        plot_time_series_graphs(df,mapper,pngs_location,multiple_features,story,
+                                fig2image,period,Paragraph,heading2)
+    
     doc.build(story)
        
