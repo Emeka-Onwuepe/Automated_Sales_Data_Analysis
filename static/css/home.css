@@ -184,6 +184,20 @@ td {
     text-align: center;
 }
 
+#discription-table {
+    max-width: 1400px;
+    margin: 20px auto;
+}
+
+#discription-table th {
+    border: 2px solid white;
+}
+
+.discription-td {
+    text-align: left;
+    text-indent: 15px;
+}
+
 footer {
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.9);

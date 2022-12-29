@@ -23,7 +23,7 @@ DATA_TYPE_SETTER = {'stock_date':clean_date,'sales_date':clean_date,
                 'del_cost':clean_sale_column,'del_charge':clean_sale_column,
                 'c_id':clean_identifiers,'c_name':clean_identifiers,
                 "c_grouping":clean_identifiers,
-                'c_city':clean_identifiers,'c_region':clean_identifiers,
+                'c_address':clean_identifiers,
                 'age':clean_age,'gender':clean_genders,
                }
 

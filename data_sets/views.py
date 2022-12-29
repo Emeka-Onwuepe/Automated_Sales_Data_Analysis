@@ -14,7 +14,7 @@ from source_code.clean.general import (DATA_TYPE_SETTER, clean_df, create_mapper
                                        get_null_table, set_data_types)
 from source_code.clean.identifiers import name_issues,get_name_issues
 from source_code.report import create_report_pdf
-from source_code.sub_classes import SUB_CLASSES
+from source_code.sub_classes import SUB_CLASSES, SUB_CLASSES_EXP
 from source_code.read_file import read_dataset
 from source_code.cleaning_report import create_cleaning_pdf
 
@@ -46,7 +46,7 @@ def ClassifyView(request,dataset_id):
     dataset.columns = json.dumps(new_col)
     dataset.save()
     return render(request,'data_sets/classify.html',{"column":new_col,"sub_classes":SUB_CLASSES,
-                                                    "dataset_id":dataset_id})
+                                                    "dataset_id":dataset_id,'table_data':SUB_CLASSES_EXP})
 
 def AnalysisView(request,dataset_id):
     

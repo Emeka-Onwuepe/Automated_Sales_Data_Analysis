@@ -4,7 +4,9 @@
     <form action="{% url 'process:analysisView' dataset_id %}" method="post">
         {% csrf_token %}
         <fieldset id="classify">
-            <legend><h3>Help us understand your data </h3></legend>
+            <legend>
+                <h3>Help us understand your data </h3>
+            </legend>
 
             {% for col in column %}
             <div class="formdiv">
@@ -20,6 +22,22 @@
         </fieldset>
         <button class="submitButton" id="submitButton" type="submit">Done</button>
     </form>
-</section>
 
+</section>
+<table id="discription-table">
+    <thead>
+        <tr>
+            <th>Labels</th>
+            <th>Representations</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key,value in table_data.items %}
+        <tr>
+            <td>{{key}}</td>
+            <td class="discription-td">{{value}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock main %}
