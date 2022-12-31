@@ -9,6 +9,7 @@ def get_percentage(series):
     
     return round((series/np.sum(series)) * 100,2)
 
+
 def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location,info_df=None):
     '''Takes in a datafrme and plots either bar or pie chart
 
@@ -34,7 +35,7 @@ def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location,info_df=
         rows,_ = df.shape
         if  rows < 5 and rows > 1:
             graph_type = "pie"
-            df.plot.pie(subplots=True,ax=ax)
+            df.plot.pie(subplots=True,autopct=lambda pct:"{:.2f}%".format(pct),wedgeprops=dict(width=0.5), startangle=-40,ax=ax)
         elif rows >= 5 :
             df.plot.bar(rot=0,width=0.8,edgecolor="black",color=sns.color_palette()[:10],ax=ax)
         else:
@@ -44,6 +45,9 @@ def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location,info_df=
         
     if ylim and graph_type != "pie" :
         plt.ylim(0,100)
+        labels = df.iloc[:,0]
+        for i in range(len(labels)):
+            plt.text(i, labels[i], labels[i], ha = 'center')
         
     # Add title and format it
     plt.title(title.title(),

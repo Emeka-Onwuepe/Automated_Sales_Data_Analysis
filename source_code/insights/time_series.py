@@ -50,7 +50,7 @@ def plot_time_series(data,feature,count,pngs_location,period = "d"):
     file_location = path.join(pngs_location,f'{label}.png')
     
     plt.savefig(file_location)
-    print(label)
+    # print(label)
     return fig,info_df
 
 def split_plot(split_into,data,max,feature ,count,
