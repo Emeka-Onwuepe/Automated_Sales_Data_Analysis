@@ -47,7 +47,7 @@ def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location,info_df=
         plt.ylim(0,100)
         labels = df.iloc[:,0]
         for i in range(len(labels)):
-            plt.text(i, labels[i], labels[i], ha = 'center')
+            plt.text(i, labels[i] + 1, f'{labels[i]}%', ha = 'center')
         
     # Add title and format it
     plt.title(title.title(),
