@@ -135,7 +135,7 @@ def clean_df(df,mapper,multiple_features,handle_outliers=handle_outliers,critica
                             null_report["ffill"].append(mapper[multiple_key])
                             df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna(method = "ffill")
                         elif is_numeric_dtype(df[mapper[multiple_key]]):
-                            null_report["zeros"].append(mapper[multiple_key])
+                            null_report["mean"].append(mapper[multiple_key])
                             df[mapper[multiple_key]] = df[mapper[multiple_key]].fillna(int(df[mapper[multiple_key]].mean()))
                     # check for outliers
                     if is_numeric_dtype(df[mapper[multiple_key]]) or df[mapper[multiple_key]].dtype == "datetime64[ns]":
@@ -163,7 +163,7 @@ def clean_df(df,mapper,multiple_features,handle_outliers=handle_outliers,critica
                         null_report["ffill"].append(mapper[mapper_key])
                         df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna(method = "ffill")
                     elif is_numeric_dtype(df[mapper[mapper_key]]):
-                        null_report["zeros"].append(mapper[mapper_key])
+                        null_report["mean"].append(mapper[mapper_key])
                         df[mapper[mapper_key]] = df[mapper[mapper_key]].fillna(int(df[mapper[mapper_key]].mean()))
                 # check for outliers
                 if is_numeric_dtype(df[mapper[mapper_key]]) or df[mapper[mapper_key]].dtype == "datetime64[ns]":
