@@ -1,0 +1,244 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    color: black;
+    /* font-family: "sans-serif"; */
+    font-family: "Roboto";
+    font-size: 16px;
+    line-height: 1.5;
+    color: white;
+}
+
+main,
+header,
+section,
+aside,
+article,
+nav,
+footer {
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    display: inline-block;
+    color: aqua;
+}
+
+body {
+    background-color: #201c1c;
+}
+
+.bigwrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 10px;
+    align-content: center;
+    background-color: #201c1c;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: calc(100% - 20px);
+    background-color: white;
+    z-index: 5;
+    background-color: #040303;
+    border-bottom: 1px dotted white;
+    padding: 0px 10px;
+}
+
+.logo h1 {
+    /* color: white; */
+    padding: 3px;
+    border: 1px solid aqua;
+    margin: 10px 0px;
+}
+
+.logo em {
+    color: aqua;
+}
+
+.sperator {
+    margin-top: 65px;
+    margin-bottom: 5px;
+}
+
+h1 {
+    text-align: center;
+}
+
+main {
+    min-height: calc(100vh - 132px);
+    background-color: #201c1c;
+    /* display: flex;
+    align-items: center; */
+    margin: 0px auto;
+    width: 100%;
+}
+
+main section {
+    margin-bottom: 20px;
+}
+
+.info {
+    margin: 5px 0px;
+}
+
+h3 {
+    margin: 3px 0px;
+}
+
+.formsection {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
+fieldset {
+    border: 2px dotted white;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+legend {
+    margin: 0px auto;
+}
+
+input,
+select {
+    margin-bottom: 5px;
+    color: #000;
+    padding: 3px;
+}
+
+#id_dataset {
+    color: #fff;
+}
+
+#classify {
+    border: 0px dotted white;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-around;
+}
+
+.formdiv {
+    flex-basis: 300px;
+    margin-bottom: 5px;
+}
+
+.formdiv label {
+    display: block;
+}
+
+.formdiv select {
+    width: 100%;
+}
+
+select {
+    background-color: #000;
+    color: white;
+}
+
+label[for=id_dataset_id] {
+    display: none;
+}
+
+#submitButton {
+    margin-top: 5px;
+    background-color: aqua;
+    color: #040303;
+    border-radius: 50px;
+    border-color: aqua;
+}
+
+.navbutton {
+    background-color: #000;
+    color: white;
+    border-color: white;
+    border-radius: 50px;
+    padding: 4px;
+}
+
+.submitButton {
+    width: 120px;
+    margin-left: calc(50% - 60px);
+}
+
+table {
+    overflow: scroll;
+}
+
+td {
+    border: 1px solid white;
+    padding: 3px;
+    text-align: center;
+}
+
+#discription-table {
+    max-width: 1400px;
+    margin: 20px auto;
+}
+
+#discription-table th {
+    border: 2px solid white;
+}
+
+.discription-td {
+    text-align: left;
+    text-indent: 15px;
+}
+
+footer {
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+#footer,
+footer span {
+    width: 100%;
+    text-align: center;
+    color: rgba(230, 230, 230, 0.9);
+    text-indent: 0px
+}
+
+.backToTop {
+    position: fixed;
+    right: 5%;
+    top: 63%;
+    text-align: center;
+    background-color: rgba(1, 1, 1, 0.4);
+    width: 40px;
+    height: 50px;
+    z-index: 150;
+    padding: 2px;
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    cursor: pointer;
+    display: none;
+}
+
+.backToTop a {
+    color: white;
+    font-size: 30px;
+}
+
+@media screen and (min-width:1520px) {
+    .bigwrapper {
+        width: 1500px;
+        margin: 0px auto;
+    }
+    header {
+        width: 1500px;
+    }
+}
