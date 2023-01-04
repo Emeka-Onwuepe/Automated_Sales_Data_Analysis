@@ -8,7 +8,7 @@ from source_code.converter import  df2table,landscape_template,list_to_string
         
         
 def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
-                        null_table_cleaned,name_errors,dataset_location):
+                        null_table_cleaned,name_errors,dataset_location,derivatives,shape):
     file_name = path.join(dataset_location,"cleaning_report.pdf")
 
     doc = BaseDocTemplate(
@@ -77,9 +77,13 @@ def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
     unique_df = DataFrame({"features":unique.index,
                               "count": unique})
     story.append(df2table(unique_df))
-    
+    if derivatives:
+        story.append(Paragraph('Feature Engineering', heading2))
+        for row in derivatives:
+            content = f"<bullet>&bull;</bullet> {row}"
+            story.append(Paragraph(content,p_style))
     story.append(Paragraph('Quantitative Feature Ranges', heading2))
-    content = "Data points that does not fall within the min and max are generally \
+    content = "Data points that does not fall within the lower bound and upper bound are generally \
     regarded as outliers and are meant to be removed but they were not removed in this analysis. \
     Each feature outlier were recored in an excel file suffix with '_outlier'"
     story.append(Paragraph(content,p_style))
@@ -93,7 +97,9 @@ def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
             
     story.append(Paragraph("Cleaned Dataset Datatypes and Null Values",heading2))
     story.append(df2table(null_table_cleaned))
-  
+    content = f"This dataset had  {shape[1]} columns and {shape[0]} rows but it changed to {df.shape[1]} columns and \
+        {df.shape[0]} rows after wrangling."
+    story.append(Paragraph(content,p_style))
     story.append(Paragraph("Statistical Summary",heading2))
     summary_sat = df.describe().reset_index()
     summary_sat.rename({"index":"statistics"},axis=1,inplace=True)

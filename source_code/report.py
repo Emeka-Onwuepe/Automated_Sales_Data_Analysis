@@ -1,13 +1,11 @@
-from email import header
-from reportlab.platypus import PageBreak,BaseDocTemplate
+from reportlab.platypus import BaseDocTemplate
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import  Paragraph   
 from os import path
-from source_code.converter import  df2table,landscape_template,list_to_string,fig2image
-from source_code.insights.time_series import average_sales, plot_time_series_graphs
+from source_code.converter import  landscape_template,fig2image
+from source_code.insights.time_series import  plot_time_series_graphs
 from source_code.insights.univariats_plot_funcs import feature_uniques_percentage
-from source_code.sub_classes import TIME_SEERIES_VAL
-
+from source_code.insights.plot_returns import plot_average_returns_graphs 
 
         
         
@@ -50,6 +48,12 @@ def create_report_pdf(df,report_heading,dataset_location,
     for period in ["d",'m']:
         plot_time_series_graphs(df,mapper,pngs_location,multiple_features,story,
                                 fig2image,period,Paragraph,heading2)
+    try:
+        if df["returns(%)"].mean() > 0:
+            plot_average_returns_graphs(df,mapper,pngs_location,multiple_features,
+                            story,fig2image,Paragraph,heading2,p_style)
+    except KeyError:
+        pass   
     
     doc.build(story)
        

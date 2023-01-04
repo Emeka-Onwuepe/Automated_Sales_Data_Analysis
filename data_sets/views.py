@@ -11,12 +11,13 @@ from django.utils import timezone
 from data_sets.models import Dataset
 from source_code.converter import  convert_to_excel
 from source_code.clean.general import (DATA_TYPE_SETTER, clean_df, create_mapper, 
-                                       get_null_table, set_data_types)
+                                       get_null_table, set_data_types,handle_outliers)
 from source_code.clean.identifiers import name_issues,get_name_issues
 from source_code.report import create_report_pdf
 from source_code.sub_classes import SUB_CLASSES, SUB_CLASSES_EXP
 from source_code.read_file import read_dataset
 from source_code.cleaning_report import create_cleaning_pdf
+from source_code.clean.sales import cal_profit
 
 
 files_location = path.join(".", 'datasets')
@@ -64,16 +65,19 @@ def AnalysisView(request,dataset_id):
         mapper = create_mapper(data)
         df,dataset = read_dataset(Dataset,user_id,dataset_id,pd)
         df.columns = json.loads(dataset.columns)
+        # select needed columns
         df = df[mapper.values()]
-        
+        shape = df.shape
         df,mapper,multiple_features,error_mgs = set_data_types(df,mapper,DATA_TYPE_SETTER)
         
         null_table,affected_nulls = get_null_table(df)
         df,null_report,outliers_report = clean_df(df,mapper,multiple_features)
-        
+        df,derivatives,new_cols = cal_profit(df,mapper,multiple_features)
+        for col in new_cols:
+            df,outliers_report = handle_outliers(df,df[col],col,outliers_report)
         name_errors = name_issues(df,mapper,multiple_features,get_name_issues)
         
-        num_ranges = pd.DataFrame(outliers_report["feature_ranges"],index=["Min","Max"])
+        num_ranges = pd.DataFrame(outliers_report["feature_ranges"],index=["Lower Bound","Upper Bound"])
         
         null_table_cleaned,_ = get_null_table(df)
         
@@ -92,7 +96,8 @@ def AnalysisView(request,dataset_id):
 
             
         create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
-                            null_table_cleaned,name_errors,dataset_location
+                            null_table_cleaned,name_errors,dataset_location,
+                            derivatives,shape
                             )
         
         create_report_pdf(df,dataset.report_title,dataset_location,

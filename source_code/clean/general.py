@@ -15,8 +15,8 @@ DATA_TYPE_SETTER = {'stock_date':clean_date,'sales_date':clean_date,
                'order_id':clean_identifiers,'p_id':clean_identifiers,'unit_cp':clean_sale_column,
                "discount_per":clean_sale_column,"discount_amount":clean_sale_column,
                'qty_sold':clean_sale_column, "payment_status":clean_identifiers,
-               "p_cat":clean_identifiers,"pro_cost":clean_sale_column,
-               'sp':clean_sale_column, 'sp_dis':clean_sale_column,
+               "p_cat":clean_identifiers,"extra_cost":clean_sale_column,
+               "extra_cost_pu":clean_sale_column,'sp':clean_sale_column, 
                "sales_grouping":clean_identifiers,'p_name':clean_identifiers,
                'ship_p_code':clean_identifiers,'del_date':clean_date,
                'delivered':delivery,'del_location':clean_identifiers,
@@ -95,7 +95,9 @@ def handle_outliers(df,col,col_name,outliers_report):
     lower = (Q1-1.5*IQR)
     outliers_report["feature_ranges"][col_name] = [lower,upper]
     outliers = df.query("@col > @upper | @col < @lower")
-    outliers_report[col_name] = outliers
+
+    if outliers.shape[0]:
+        outliers_report[col_name] = outliers
 
     return df,outliers_report
 
