@@ -1,1 +1,1 @@
-web: python manage.py migrate && gunicorn Sales_Analysis_App.wsgi --log-file - 
+web: python manage.py migrate && python manage.py collectstatic  && gunicorn Sales_Analysis_App.wsgi --log-file - 
