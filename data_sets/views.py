@@ -18,6 +18,9 @@ from source_code.sub_classes import SUB_CLASSES, SUB_CLASSES_EXP
 from source_code.read_file import read_dataset
 from source_code.cleaning_report import create_cleaning_pdf
 from source_code.clean.sales import cal_profit
+import warnings
+warnings.filterwarnings('ignore')
+import gc
 
 
 files_location = path.join(".", 'datasets')
@@ -61,7 +64,7 @@ def AnalysisView(request,dataset_id):
     if request.method == "POST":
         data = dict(request.POST)
         del data['csrfmiddlewaretoken']
-
+        gc.collect()
         mapper = create_mapper(data)
         df,dataset = read_dataset(Dataset,user_id,dataset_id,pd)
         df.columns = json.loads(dataset.columns)
@@ -94,7 +97,7 @@ def AnalysisView(request,dataset_id):
             makedirs(excels_location)
             makedirs(pngs_location)
 
-            
+        gc.collect() 
         create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
                             null_table_cleaned,name_errors,dataset_location,
                             derivatives,shape
@@ -124,7 +127,19 @@ def AnalysisView(request,dataset_id):
         if path.exists(files_location):
             rmtree(path.join(dataset_location))
             remove(zip_location)
-                 
+    
+    # local_vars =  dir()
+    # print(local_vars)
+    # print(globals().keys())
+
+    # for key in local_vars:
+    #     if not key.startswith("__") and key !="request": 
+            # del locals()[key]
+            # del globals()[key]
+    # gc.collect()          
+    # print(dir())
+    # del dataset_id
+    # print(dataset_id)
     return HttpResponseRedirect(reverse('process:dashboardView'))
 
 

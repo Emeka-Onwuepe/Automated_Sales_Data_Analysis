@@ -6,6 +6,7 @@ from source_code.converter import  landscape_template,fig2image
 from source_code.insights.time_series import  plot_time_series_graphs
 from source_code.insights.univariats_plot_funcs import feature_uniques_percentage
 from source_code.insights.plot_returns import plot_average_returns_graphs 
+from matplotlib.pylab import close
 
         
         
@@ -43,6 +44,8 @@ def create_report_pdf(df,report_heading,dataset_location,
         fig,info_df = feature_uniques_percentage(cat_features,col,pngs_location)
         story.append(fig2image(fig))
         story.append(Paragraph(" ".join(info_df),p_style))
+        close("all")
+        del fig,info_df
     
     
     for period in ["d",'m']:

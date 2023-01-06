@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pylab as plt
 import seaborn as sns
 from os import path
@@ -26,7 +28,7 @@ def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location,info_df=
    
     fig,ax = plt.subplots(dpi=300,figsize = [12, 5])
     plt.subplots_adjust(bottom=0.30)
-
+    
     if graph_type == "bar":
         df.plot.bar(rot=0,width=0.8,edgecolor="black",color=sns.color_palette()[:10],ax=ax)
     elif graph_type == 'pie':
@@ -61,7 +63,7 @@ def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location,info_df=
     
     file_location = path.join(pngs_location,f'{xlabel}.png')
     plt.savefig(file_location)
-    
+   
     return fig,info_df
 
 def feature_uniques_percentage(df,feature_name,pngs_location,graph=None,ylim= True,

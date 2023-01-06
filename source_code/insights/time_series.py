@@ -1,8 +1,11 @@
 # from seaborn import color_palette
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pylab as plt
 from os import path
 
 from source_code.sub_classes import TIME_SEERIES_VAL
+from matplotlib.pylab import close
 
 # data_sum = df_clean.groupby(df_clean.start_time.dt.dayofweek)['distance_km','duration_hr'].sum()
 # data_count = df_clean.groupby(df_clean.start_time.dt.dayofweek)['distance_km'].count()
@@ -126,7 +129,8 @@ def plot_time_series_graphs(df,mapper,pngs_location,multiple_features,
     for feature in TIME_SEERIES_VAL:
         graph_list = None
         try:
-             graph_list = average_sales(df,mapper['sales_date'],mapper[feature],mapper,pngs_location,period)
+            graph_list = average_sales(df,mapper['sales_date'],mapper[feature],mapper,pngs_location,period)
+            pass
         except KeyError:
             continue 
         
@@ -134,6 +138,8 @@ def plot_time_series_graphs(df,mapper,pngs_location,multiple_features,
             for graph in graph_list:
                 fig,info_df = graph
                 story.append(fig2image(fig))
+                close("all")
+                del fig,info_df
     # multiple keys
     for feature in TIME_SEERIES_VAL:
         graph_list = None
@@ -151,4 +157,6 @@ def plot_time_series_graphs(df,mapper,pngs_location,multiple_features,
             for graph in graph_list:
                 fig,info_df = graph
                 story.append(fig2image(fig))
+                close("all")
+                del fig,info_df
                          

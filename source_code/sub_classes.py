@@ -21,7 +21,7 @@ CRITICAL = ["unit_cp","sp","discount_per","discount_amount","qty_sold",
 #                   "del_location","c_grouping",'c_region']
 
 TIME_SEERIES_VAL = ['p_cat','sales_grouping','p_name','c_grouping']
-PRODUCT_VAL = ['p_cat','p_name']
+PRODUCT_VAL = ['p_cat','p_name','p_id']
 
 SUB_CLASSES_EXP =  {"Select the appropriate label":"Kindly leave any unnecessary column/feature unselected \
                          or select not found",

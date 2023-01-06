@@ -15,6 +15,7 @@ def convert_to_excel(data,dataset_location,file_name):
     writer = pd.ExcelWriter(df_file,engine="xlsxwriter")
     data.to_excel(writer,index=False)
     writer.save()
+    writer.close()
    
       
 padding = dict(

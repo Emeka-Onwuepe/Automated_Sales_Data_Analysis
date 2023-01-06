@@ -1,7 +1,10 @@
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pylab as plt
 from os import path
 
 from source_code.sub_classes import PRODUCT_VAL
+from matplotlib.pylab import close
 
 def plot_average_returns(data,feature,count,pngs_location):
     
@@ -89,7 +92,7 @@ def plot_average_returns_graphs(df,mapper,pngs_location,multiple_features,
     for feature in PRODUCT_VAL:
         graph_list = None
         try:
-             graph_list = average_returns(df,mapper[feature],pngs_location)
+            graph_list = average_returns(df,mapper[feature],pngs_location)
         except KeyError:
             continue 
         
@@ -97,6 +100,8 @@ def plot_average_returns_graphs(df,mapper,pngs_location,multiple_features,
             for graph in graph_list:
                 fig,info_df = graph
                 story.append(fig2image(fig))
+                close("all")
+                del fig,info_df
     # multiple keys
     for feature in PRODUCT_VAL:
         graph_list = None
@@ -114,4 +119,6 @@ def plot_average_returns_graphs(df,mapper,pngs_location,multiple_features,
             for graph in graph_list:
                 fig,info_df = graph
                 story.append(fig2image(fig))
+                close("all")
+                del fig,info_df
                          
