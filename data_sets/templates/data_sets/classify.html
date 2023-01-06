@@ -1,4 +1,9 @@
- {% extends 'home/home.html' %}{% load static %} {% block main %}
+ {% extends 'home/home.html' %}{% load static %} 
+ 
+ {% block title %}
+ <title>Classify</title>
+ {% endblock title %}
+ {% block main %}
 
 <section class="formsection">
     <form action="{% url 'process:analysisView' dataset_id %}" method="post">
