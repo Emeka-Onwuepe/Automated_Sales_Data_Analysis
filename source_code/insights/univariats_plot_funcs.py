@@ -12,7 +12,7 @@ def get_percentage(series):
     return round((series/np.sum(series)) * 100,2)
 
 
-def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location,info_df=None):
+def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location):
     '''Takes in a datafrme and plots either bar or pie chart
 
         Paramenters
@@ -64,10 +64,10 @@ def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location,info_df=
     file_location = path.join(pngs_location,f'{xlabel}.png')
     plt.savefig(file_location)
    
-    return fig,info_df
+    return fig
 
-def feature_uniques_percentage(df,feature_name,pngs_location,graph=None,ylim= True,
-                               cal_percentage = get_percentage,graph_fun = plot_graph):
+def feature_uniques_percentage(df,feature_name,graph=None,ylim= True,
+                               cal_percentage = get_percentage):
     '''Takes in string feature_name and other optional arguments 
         and plots either bar or pie chart of the feature unique
         values percentages
@@ -78,7 +78,6 @@ def feature_uniques_percentage(df,feature_name,pngs_location,graph=None,ylim= Tr
         graph: str -- optional -- default: None
         ylim: boolean -- optional -- default: True
         cal_percentage: function -- optional -- default: global scope get_percentage function
-        graph_fun: function -- optional -- default: global scope plot_graph function
          
     '''
     #  get the counts of the feature unique values
@@ -95,6 +94,9 @@ def feature_uniques_percentage(df,feature_name,pngs_location,graph=None,ylim= Tr
 
     title = f"unique values percentages of {feature_name} feature " 
     #   call the graph function
-    return graph_fun(feature_df,graph,title,feature_name,'Percentage',ylim,pngs_location,info_df=info_df)
+    return {"df":feature_df,"graph_type":graph,"title":title,"xlabel":feature_name,
+             "ylabel":'Percentage',"ylim":ylim},info_df
+    
+    # return graph_fun(feature_df,graph,title,feature_name,'Percentage',ylim,pngs_location,info_df=info_df)
     
 

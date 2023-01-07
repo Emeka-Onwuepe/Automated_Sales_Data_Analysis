@@ -1,14 +1,7 @@
-# from seaborn import color_palette
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pylab as plt
 from os import path
-
-from source_code.sub_classes import TIME_SEERIES_VAL
-from matplotlib.pylab import close
-
-# data_sum = df_clean.groupby(df_clean.start_time.dt.dayofweek)['distance_km','duration_hr'].sum()
-# data_count = df_clean.groupby(df_clean.start_time.dt.dayofweek)['distance_km'].count()
 
 def plot_time_series(data,feature,count,pngs_location,period = "d"):
     
@@ -57,28 +50,33 @@ def plot_time_series(data,feature,count,pngs_location,period = "d"):
     return fig,info_df
 
 def split_plot(split_into,data,max,feature ,count,
-                start, end,pngs_location,period,result,
-                plot_time_series = plot_time_series):
+                start, end,period,result):
                 try:
                     if split_into == 1:
-                        result.append(plot_time_series(data.iloc[:,start:end],feature,count,pngs_location,period))
+                       
+                        result.append({"data":data.iloc[:,start:end],
+                                        "feature":feature,"count":count,
+                                        "period":period})
                         count+=1
-                        result.append(plot_time_series(data.iloc[:,end:],feature,count,pngs_location,period))
+                        result.append({"data":data.iloc[:,end:],
+                                        "feature":feature,"count":count,
+                                        "period":period})
                         return result
                     
-                 
-                    result.append(plot_time_series(data.iloc[:,start:end],feature,count,pngs_location,period))
+                    result.append({"data":data.iloc[:,start:end],
+                                        "feature":feature,"count":count,
+                                        "period":period})
                     start,end = end,end+max
                     split_into-=1
                     count+=1
                     return split_plot(split_into,data,max,
                                   feature,count,start,end,
-                                  pngs_location,period,result)
+                                  period,result)
                 except IndexError:
                     return result
                
 
-def average_sales(df,sales_date,feature,mapper,pngs_location,period ="d"):
+def average_sales(df,sales_date,feature,mapper,period ="d"):
     maximium = 6
     count = 0
     if period == 'd':
@@ -93,10 +91,10 @@ def average_sales(df,sales_date,feature,mapper,pngs_location,period ="d"):
             split_into = length // maximium
             count = 1
             return split_plot(split_into,data_median,maximium,feature,
-                           count,0, maximium,pngs_location,period,[])
+                           count,0, maximium,period,[])
         elif data_median.shape[1] <= maximium:
-            return [plot_time_series(data_median,feature,count,
-                                    pngs_location,period)]
+            return [ {"data":data_median, "feature":feature,
+                        "count":count,"period":period}]
             
     else:
         period = "m"
@@ -110,53 +108,8 @@ def average_sales(df,sales_date,feature,mapper,pngs_location,period ="d"):
             split_into = length // maximium
             return split_plot(split_into,data_sum,maximium,
                               feature,count,0, maximium,
-                              pngs_location,period,[])
+                              period,[])
         elif data_sum.shape[1] <= maximium:
-            return [plot_time_series(data_sum,feature, count,
-                                    pngs_location,period)]
 
-
-
-def plot_time_series_graphs(df,mapper,pngs_location,multiple_features,
-                            story,fig2image,period,Paragraph,heading2):
-    label_period = "Daily"
-    if period == "d":
-        label_period = "Daily"
-    elif period == "m":
-        label_period = "Monthly"
-    
-    story.append(Paragraph(f'{label_period} Sales Graphs',heading2))
-    for feature in TIME_SEERIES_VAL:
-        graph_list = None
-        try:
-            graph_list = average_sales(df,mapper['sales_date'],mapper[feature],mapper,pngs_location,period)
-            pass
-        except KeyError:
-            continue 
-        
-        if graph_list:
-            for graph in graph_list:
-                fig,info_df = graph
-                story.append(fig2image(fig))
-                close("all")
-                del fig,info_df
-    # multiple keys
-    for feature in TIME_SEERIES_VAL:
-        graph_list = None
-        try:
-            for feature2 in multiple_features[feature]:
-                try:
-                    graph_list = average_sales(df,mapper['sales_date'],mapper[feature2],mapper,pngs_location,period)
-                except KeyError:
-                    continue 
-        except KeyError:
-            continue
-        
-            
-        if graph_list:
-            for graph in graph_list:
-                fig,info_df = graph
-                story.append(fig2image(fig))
-                close("all")
-                del fig,info_df
-                         
+            return [{"data":data_sum, "feature":feature,
+            "count":count,"period":period}]
