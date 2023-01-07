@@ -13,3 +13,9 @@ def permission_denied(request, exception):
 def bad_request(request, exception):
     temp_page = 'errortemplate/400.html' 
     return render(request,temp_page)
+
+
+def server_error(request):
+    temp_page = 'errortemplate/500.html' 
+    return render(request,temp_page)
+    
