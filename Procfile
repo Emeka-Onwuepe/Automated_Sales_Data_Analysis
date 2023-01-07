@@ -1,1 +1,1 @@
-web: python manage.py migrate  && gunicorn Sales_Analysis_App.wsgi --log-file - 
+web: python manage.py migrate  && gunicorn Sales_Analysis_App.wsgi --log-file - && python manage.py runserver --noreload 0.0.0.0:3334
