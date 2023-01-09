@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from env import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,14 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*qrrau#wqx-9^_d1y$nj5ky1==o29_ejznb3f!$sbkq_g71+jt'
+SECRET_KEY = env.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 # if not DEBUG:
 CSRF_TRUSTED_ORIGINS = ["https://automatedsalesdataanalysis-production.up.railway.app",
-"http://3.139.101.185","3.139.101.185"]
+"http://3.139.101.185"]
 
 ALLOWED_HOSTS = ["automatedsalesdataanalysis-production.up.railway.app",
                  "https://automatedsalesdataanalysis-production.up.railway.app",'127.0.0.1',
@@ -133,8 +134,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # # AWS settings
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID ")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_ACCESS_KEY_ID = env.AWS_ACCESS_KEY_ID 
+AWS_SECRET_ACCESS_KEY = env.AWS_SECRET_ACCESS_KEY
 AWS_STORAGE_BUCKET_NAME = "casper-web-files"
 AWS_S3_FILE_OVERWRITE = False
 DEFAULT_FILE_STORAGE = 'Sales_Analysis_App.aws_storage.MediaStorage'
