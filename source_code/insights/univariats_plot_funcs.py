@@ -1,6 +1,6 @@
-import numpy as np
-import matplotlib
-matplotlib.use("Agg")
+from numpy import sum 
+from matplotlib import use
+use("Agg")
 import matplotlib.pylab as plt
 import seaborn as sns
 from os import path
@@ -9,8 +9,7 @@ def get_percentage(series):
     '''Takes in a series/list and returns the percentage
         of each element to the summation of the list/series elements'''
     
-    return round((series/np.sum(series)) * 100,2)
-
+    return round((series/sum(series)) * 100,2)
 
 def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location):
     '''Takes in a datafrme and plots either bar or pie chart
@@ -83,7 +82,6 @@ def feature_uniques_percentage(df,feature_name,graph=None,ylim= True,
     #  get the counts of the feature unique values
     feature_df = df[feature_name].value_counts().to_frame()
     
-   
     feature_df["count"] = feature_df[feature_name]
     feature_df[feature_name] = cal_percentage(feature_df[feature_name])
     
@@ -97,6 +95,3 @@ def feature_uniques_percentage(df,feature_name,graph=None,ylim= True,
     return {"df":feature_df,"graph_type":graph,"title":title,"xlabel":feature_name,
              "ylabel":'Percentage',"ylim":ylim},info_df
     
-    # return graph_fun(feature_df,graph,title,feature_name,'Percentage',ylim,pngs_location,info_df=info_df)
-    
-

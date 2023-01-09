@@ -8,10 +8,8 @@ from source_code.insights.univariats_plot_funcs import feature_uniques_percentag
 from source_code.insights.plot_returns import average_returns,plot_average_returns
 from source_code.sub_classes import TIME_SEERIES_VAL,PRODUCT_VAL
 from matplotlib.pylab import close
-from gc import collect
-
-        
-        
+# from gc import collect
+       
 def create_report_pdf(df,report_heading,dataset_location,
                       pngs_location,excels_location,mapper,multiple_features):
     
@@ -49,9 +47,8 @@ def create_report_pdf(df,report_heading,dataset_location,
         story.append(Paragraph(" ".join(info_df),p_style))
         close("all")
         del data_dic,info_df,fig
-        collect()
+        #collect()
      
-
     ### plot Time Series
     for period in ["d",'m']:
 
@@ -59,45 +56,43 @@ def create_report_pdf(df,report_heading,dataset_location,
         if period == "m":
             label_period = "Monthly"
         
-        
         story.append(Paragraph(f'{label_period} Sales Graphs',heading2))
-        for feature in TIME_SEERIES_VAL:
-            graph_list = None
+        for item in TIME_SEERIES_VAL:
+            data_list = None
             try:
-                graph_list = average_sales(df,mapper['sales_date'],mapper[feature],mapper,period)
+                data_list = average_sales(df,mapper['sales_date'],mapper[item],mapper,period)
                 pass
             except KeyError:
                 continue 
             
-            if graph_list:
-                for graph in graph_list:
-                    fig,info_df = plot_time_series(pngs_location=pngs_location,**graph)
+            if data_list:
+                for count,data in enumerate(data_list):
+                    fig,info_df = plot_time_series(data,mapper[item],count,pngs_location,period)
                     story.append(fig2image(fig))
                     close("all")
                     del fig,info_df
-                    collect()
-                graph_list = None
+                    #collect()
+                data_list = None
         # multiple keys
-        for feature in TIME_SEERIES_VAL:
-            graph_list = None
+        for item in TIME_SEERIES_VAL:
+            data_list = None
             try:
-                for feature2 in multiple_features[feature]:
+                for item2 in multiple_features[item]:
                     try:
-                        graph_list = average_sales(df,mapper['sales_date'],mapper[feature2],mapper,period)
+                        data_list = average_sales(df,mapper['sales_date'],mapper[item2],mapper,period)
                     except KeyError:
                         continue 
             except KeyError:
                 continue
                 
-            if graph_list:
-                for graph in graph_list:
-                    fig,info_df = plot_time_series(pngs_location=pngs_location,**graph)
+            if data_list:
+                for count,data in enumerate(data_list):
+                    fig,info_df = plot_time_series(data,mapper[item2],count,pngs_location,period)
                     story.append(fig2image(fig))
                     close("all")
                     del fig,info_df
-                    collect()
-                graph_list = None
-
+                    #collect()
+                data_list = None
 
     ### Sales Return                         
     try:
@@ -107,42 +102,41 @@ def create_report_pdf(df,report_heading,dataset_location,
                 the product on average has yeilded 10% of the cost price or gross cost price as profit "
             story.append(Paragraph(content,p_style))
             
-            for feature in PRODUCT_VAL:
-                graph_list = None
+            for item in PRODUCT_VAL:
+                data_list = None
                 try:
-                    graph_list = average_returns(df,mapper[feature])
+                    data_list = average_returns(df,mapper[item])
                 except KeyError:
                     continue 
                 
-                if graph_list:
-                    for graph in graph_list:
-                        fig,info_df = plot_average_returns(pngs_location=pngs_location,**graph)
+                if data_list:
+                    for count,data in enumerate(data_list):
+                        fig,info_df = plot_average_returns(data,mapper[item],count,pngs_location)
                         story.append(fig2image(fig))
                         close("all")
                         del fig,info_df
-                        collect()
-                graph_list = None
+                        #collect()
+                data_list = None
             # multiple keys
-            for feature in PRODUCT_VAL:
-                graph_list = None
+            for item in PRODUCT_VAL:
+                data_list = None
                 try:
-                    for feature2 in multiple_features[feature]:
+                    for item2 in multiple_features[item]:
                         try:
-                            graph_list = average_returns(df,mapper[feature2])
+                            data_list = average_returns(df,mapper[item2])
                         except KeyError:
                             continue 
                 except KeyError:
                     continue
-                
-                    
-                if graph_list:
-                    for graph in graph_list:
-                        fig,info_df = plot_average_returns(pngs_location=pngs_location,**graph)
+                             
+                if data_list:
+                    for count,data in enumerate(data_list):
+                        fig,info_df = plot_average_returns(data,mapper[item2],count,pngs_location)
                         story.append(fig2image(fig))
                         close("all")
                         del fig,info_df
-                        collect()
-                graph_list = None
+                        #collect()
+                data_list = None
     except KeyError:
         pass
 

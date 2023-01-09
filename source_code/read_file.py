@@ -1,9 +1,8 @@
-
 def read_dataset(model,user_id,dataset_id,pd):
     df = None
     dataset = None
     file_data = None
-
+    
     try:
 
         dataset= model.objects.get(user_id__user_id = user_id, dataset_id= dataset_id)

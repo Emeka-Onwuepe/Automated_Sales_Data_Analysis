@@ -1,5 +1,5 @@
-import matplotlib
-matplotlib.use("Agg")
+from matplotlib import use
+use("Agg")
 import matplotlib.pylab as plt
 from os import path
 
@@ -49,67 +49,93 @@ def plot_time_series(data,feature,count,pngs_location,period = "d"):
     # print(label)
     return fig,info_df
 
-def split_plot(split_into,data,max,feature ,count,
-                start, end,period,result):
-                try:
-                    if split_into == 1:
+# def split_plot(split_into,data,max,feature ,count,
+#                 start, end,period,result):
+#                 try:
+#                     if split_into == 1:
                        
-                        result.append({"data":data.iloc[:,start:end],
-                                        "feature":feature,"count":count,
-                                        "period":period})
-                        count+=1
-                        result.append({"data":data.iloc[:,end:],
-                                        "feature":feature,"count":count,
-                                        "period":period})
-                        return result
+#                         result.append({"data":data.iloc[:,start:end],
+#                                         "feature":feature,"count":count,
+#                                         "period":period})
+#                         count+=1
+#                         result.append({"data":data.iloc[:,end:],
+#                                         "feature":feature,"count":count,
+#                                         "period":period})
+#                         return result
                     
-                    result.append({"data":data.iloc[:,start:end],
-                                        "feature":feature,"count":count,
-                                        "period":period})
-                    start,end = end,end+max
-                    split_into-=1
-                    count+=1
-                    return split_plot(split_into,data,max,
-                                  feature,count,start,end,
-                                  period,result)
-                except IndexError:
-                    return result
+#                     result.append({"data":data.iloc[:,start:end],
+#                                         "feature":feature,"count":count,
+#                                         "period":period})
+#                     start,end = end,end+max
+#                     split_into-=1
+#                     count+=1
+#                     return split_plot(split_into,data,max,
+#                                   feature,count,start,end,
+#                                   period,result)
+#                 except IndexError:
+#                     return result
                
 
-def average_sales(df,sales_date,feature,mapper,period ="d"):
+
+def average_sales(df,sales_date,feature,mapper,period):
     maximium = 6
-    count = 0
-    if period == 'd':
+    data_list = []
+    data = None
+
+    if period == "d":
+        data = df.groupby([df[sales_date].dt.dayofweek,feature])[mapper['qty_sold']].median().unstack()
+    elif period == "m":
+        data = df.groupby([df[sales_date].dt.month,feature])[mapper['qty_sold']].sum().unstack()
     
-        data_median = df.groupby([df[sales_date].dt.dayofweek,feature])[mapper['qty_sold']].median().unstack()
-
-        data_median.fillna(0,inplace = True)
-        
-        
-        if data_median.shape[1] > maximium:
-            length = data_median.shape[1]
-            split_into = length // maximium
-            count = 1
-            return split_plot(split_into,data_median,maximium,feature,
-                           count,0, maximium,period,[])
-        elif data_median.shape[1] <= maximium:
-            return [ {"data":data_median, "feature":feature,
-                        "count":count,"period":period}]
-            
+    data.fillna(0,inplace = True)
+    if data.shape[1] > maximium:
+        length = data.shape[1]
+        split_into = length // maximium
+        if (length % split_into) > 0:
+            split_into += 1
+            data_list = array_split(data,split_into)
     else:
-        period = "m"
-        count = 0
-        data_sum = df.groupby([df[sales_date].dt.month,feature])[mapper['qty_sold']].sum().unstack()
-        data_sum.fillna(0,inplace = True)
-      
-        if data_sum.shape[1] > maximium:
-            count = 1
-            length = data_sum.shape[1]
-            split_into = length // maximium
-            return split_plot(split_into,data_sum,maximium,
-                              feature,count,0, maximium,
-                              period,[])
-        elif data_sum.shape[1] <= maximium:
+        data_list.append(data)
 
-            return [{"data":data_sum, "feature":feature,
-            "count":count,"period":period}]
+    return data_list
+
+
+    #     data_median = df.groupby([df[sales_date].dt.dayofweek,feature])[mapper['qty_sold']].median().unstack()
+    #     data_median.fillna(0,inplace = True)
+        
+    #     if data_median.shape[1] > maximium:
+    #         length = data_median.shape[1]
+    #         split_into = length // maximium
+    #         if (length % split_into) > 0:
+    #             split_into += 1
+    #         data_list = array_split(data_median,split_into)
+    #     else:
+    #         data_list.append(df)
+
+    #     if data_median.shape[1] > maximium:
+    #         length = data_median.shape[1]
+    #         split_into = length // maximium
+    #         count = 1
+    #         return split_plot(split_into,data_median,maximium,feature,
+    #                        count,0, maximium,period,[])
+    #     elif data_median.shape[1] <= maximium:
+    #         return [ {"data":data_median, "feature":feature,
+    #                     "count":count,"period":period}]
+            
+    # else:
+    #     period = "m"
+    #     count = 0
+    #     data_sum = df.groupby([df[sales_date].dt.month,feature])[mapper['qty_sold']].sum().unstack()
+    #     data_sum.fillna(0,inplace = True)
+      
+    #     if data_sum.shape[1] > maximium:
+    #         count = 1
+    #         length = data_sum.shape[1]
+    #         split_into = length // maximium
+    #         return split_plot(split_into,data_sum,maximium,
+    #                           feature,count,0, maximium,
+    #                           period,[])
+    #     elif data_sum.shape[1] <= maximium:
+
+    #         return [{"data":data_sum, "feature":feature,
+    #         "count":count,"period":period}]

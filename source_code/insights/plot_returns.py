@@ -1,8 +1,8 @@
-import matplotlib
-matplotlib.use("Agg")
+from matplotlib import use
+use("Agg")
 import matplotlib.pylab as plt
+from numpy import array_split
 from os import path
-
 
 def plot_average_returns(data,feature,count,pngs_location):
     
@@ -19,7 +19,6 @@ def plot_average_returns(data,feature,count,pngs_location):
     # fig.canvas.draw()
     
     # print(ax.yaxis.get_offset_text().get_text())
-    
     plt.title(title.title(),fontsize = 14, weight = "bold");
     # Add x label and format i
     plt.xlabel(xlabel,fontsize = 10, weight = "bold");
@@ -36,41 +35,45 @@ def plot_average_returns(data,feature,count,pngs_location):
     # print(label)
     return fig,info_df
 
-def split_plot(split_into,data,max,feature ,count,
-                start, end,result):
-                try:
-                    if split_into == 1:
-                        result.append({"data":data[start:end],"feature":feature,"count":count})
-                        count+=1
+# def split_plot(split_into,data,max,feature ,count,
+#                 start, end,result):
+#                 try:
+#                     if split_into == 1:
+#                         result.append({"data":data[start:end],"feature":feature,"count":count})
+#                         count+=1
                         
-                        result.append({"data":data[end:],"feature":feature,"count":count})
-                        return result
+#                         result.append({"data":data[end:],"feature":feature,"count":count})
+#                         return result
                     
                  
-                    result.append({"data":data[start:end],"feature":feature,"count":count})
-                    start,end = end,end+max
-                    split_into-=1
-                    count+=1
-                    return split_plot(split_into,data,max,
-                                  feature,count,start,end,result)
-                except IndexError:
-                    return result
+#                     result.append({"data":data[start:end],"feature":feature,"count":count})
+#                     start,end = end,end+max
+#                     split_into-=1
+#                     count+=1
+#                     return split_plot(split_into,data,max,
+#                                   feature,count,start,end,result)
+#                 except IndexError:
+#                     return result
                
+
 
 def average_returns(df,feature):
     maximium = 16
-    count = 0
+    data_list = []
     
     data = df.groupby(feature)["returns(%)"].mean().sort_values()
     data.fillna(0,inplace = True)
-          
-    if len(data) > maximium:
-        length = data.shape[1]
+
+    if data.size > maximium:
+        length = data.size
         split_into = length // maximium
-        count = 1
-        return split_plot(split_into,data,maximium,feature,
-                           count,0, maximium,[])
-    elif len(data) <= maximium:
-        
-        return [{"data":data,"feature":feature,"count":count}]
+        if (length % split_into) > 0:
+            split_into += 1
+        data_list = array_split(data,split_into)
+    else:
+        data_list.append(data)
+    
+    return data_list
+
+
             

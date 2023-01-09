@@ -1,5 +1,5 @@
 from os import path
-import pandas as pd
+from pandas import ExcelWriter
 from reportlab.platypus import Frame
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.platypus import PageTemplate
@@ -12,7 +12,7 @@ from reportlab.lib import colors
 
 def convert_to_excel(data,dataset_location,file_name):
     df_file = path.join(dataset_location,f"{file_name}.xlsx")
-    writer = pd.ExcelWriter(df_file,engine="xlsxwriter")
+    writer = ExcelWriter(df_file,engine="xlsxwriter")
     data.to_excel(writer,index=False)
     writer.save()
     writer.close()
