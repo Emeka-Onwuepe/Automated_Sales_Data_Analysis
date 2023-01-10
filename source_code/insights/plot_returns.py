@@ -35,28 +35,6 @@ def plot_average_returns(data,feature,count,pngs_location):
     # print(label)
     return fig,info_df
 
-# def split_plot(split_into,data,max,feature ,count,
-#                 start, end,result):
-#                 try:
-#                     if split_into == 1:
-#                         result.append({"data":data[start:end],"feature":feature,"count":count})
-#                         count+=1
-                        
-#                         result.append({"data":data[end:],"feature":feature,"count":count})
-#                         return result
-                    
-                 
-#                     result.append({"data":data[start:end],"feature":feature,"count":count})
-#                     start,end = end,end+max
-#                     split_into-=1
-#                     count+=1
-#                     return split_plot(split_into,data,max,
-#                                   feature,count,start,end,result)
-#                 except IndexError:
-#                     return result
-               
-
-
 def average_returns(df,feature):
     maximium = 16
     data_list = []
@@ -67,13 +45,11 @@ def average_returns(df,feature):
     if data.size > maximium:
         length = data.size
         split_into = length // maximium
-        if (length % split_into) > 0:
+        if (length % maximium) > 0:
             split_into += 1
         data_list = array_split(data,split_into)
+        del data
     else:
         data_list.append(data)
     
     return data_list
-
-
-            

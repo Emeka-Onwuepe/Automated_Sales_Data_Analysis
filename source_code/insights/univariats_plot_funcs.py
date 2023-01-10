@@ -40,10 +40,8 @@ def plot_graph(df,graph_type, title ,xlabel, ylabel, ylim,pngs_location):
         elif rows >= 5 :
             df.plot.bar(rot=0,width=0.8,edgecolor="black",color=sns.color_palette()[:10],ax=ax)
         else:
-            return None,None
-            
-        
-        
+            return None
+               
     if ylim and graph_type != "pie" :
         plt.ylim(0,100)
         labels = df.iloc[:,0]
