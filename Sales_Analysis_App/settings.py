@@ -29,11 +29,11 @@ DEBUG = False
 
 # if not DEBUG:
 CSRF_TRUSTED_ORIGINS = ["https://automatedsalesdataanalysis-production.up.railway.app",
-"http://3.139.101.185"]
+"http://18.224.93.5"]
 
 ALLOWED_HOSTS = ["automatedsalesdataanalysis-production.up.railway.app",
                  "https://automatedsalesdataanalysis-production.up.railway.app",'127.0.0.1',
-                 "http://3.139.101.185","3.139.101.185"]
+                 "http://18.224.93.5","18.224.93.5"]
 
 
 # Application definition
