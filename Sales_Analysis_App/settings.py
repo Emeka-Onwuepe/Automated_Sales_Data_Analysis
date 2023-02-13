@@ -150,3 +150,10 @@ STATICFILES_STORAGE = "Sales_Analysis_App.aws_storage.StaticStorage"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# os.env
+
+if not SECRET_KEY:
+    SECRET_KEY = os.getenv("SECRET_KEY") 
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID ')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
