@@ -8,7 +8,8 @@ from source_code.converter import  df2table,landscape_template,list_to_string
         
         
 def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
-                        null_table_cleaned,name_errors,dataset_location,derivatives,shape):
+                        null_table_cleaned,name_errors,dataset_location,derivatives,shape,
+                        rename_msg):
     file_name = path.join(dataset_location,"cleaning_report.pdf")
 
     doc = BaseDocTemplate(
@@ -46,7 +47,9 @@ def create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
             content2 = f"We also dropped {string} as {identifier[0]} only {identifier[1]} year."
             content += content2
         story.append(Paragraph(content,p_style))
-        
+    for msg in rename_msg:
+        story.append(Paragraph(msg,p_style))
+
     story.append(df2table(df.head()))
     
     if null_table.shape[0]:

@@ -16,7 +16,8 @@ DATA_TYPE_SETTER = {'stock_date':clean_date,'sales_date':clean_date,
                "discount_per":clean_sale_column,"discount_amount":clean_sale_column,
                'qty_sold':clean_sale_column, "payment_status":clean_identifiers,
                "p_cat":clean_identifiers,"extra_cost":clean_sale_column,
-               "extra_cost_pu":clean_sale_column,'sp':clean_sale_column, 
+               "extra_cost_pu":clean_sale_column,'sp':clean_sale_column,
+               "total_cp":clean_sale_column,"total_sp":clean_sale_column, 
                "sales_grouping":clean_identifiers,'p_name':clean_identifiers,
                'ship_p_code':clean_identifiers,'del_date':clean_date,
                'delivered':delivery,'del_location':clean_identifiers,
@@ -184,3 +185,22 @@ def get_null_table(df):
     return null_table,nulls
         
    
+def rename_cols(df,mapper):
+    rename_msg = []
+    total_cp = False
+    total_sp = False
+    try:
+        df.rename(columns = {mapper["total_cp"]:"total_cost_price"},inplace=True,error="ignore")
+        rename_msg.append(f"We renamed {mapper['total_cp']} to total_cost_price ")
+        mapper["total_cp"] = "total_cost_price"
+        total_cp = True
+    except KeyError:
+        pass
+    try:
+        df.rename(columns = {mapper["total_sp"]:"total_selling_price"},inplace=True,error="ignore")
+        rename_msg.append(f"We renamed {mapper['total_sp']} to total_selling_price ")
+        mapper["total_sp"] = "total_selling_price"
+        total_sp = True
+    except KeyError:
+        pass
+    return df,rename_msg,total_cp,total_sp

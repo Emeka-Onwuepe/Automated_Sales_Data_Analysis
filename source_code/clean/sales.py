@@ -101,48 +101,52 @@ def cal_delivery_profit(df,mapper):
         pass
     return df,formular
 
-def cal_profit(df,mapper,multiple_features):
+def cal_profit(df,mapper,multiple_features,total_cp,total_sp):
     derivatives = []
     new_cols = []
-    df,total_cp_formular = cal_total_cost_price(df,mapper)
-    if total_cp_formular:
-       derivatives.append(total_cp_formular)
-       new_cols.append("total_cost_price")
-    df,total_sp_formular = cal_total_selling_price(df,mapper)
-    if total_sp_formular:
-       derivatives.append(total_sp_formular)
-       new_cols.append("total_selling_price")
+    if not total_cp :
+        df,total_cp_formular = cal_total_cost_price(df,mapper)
+        if total_cp:
+            derivatives.append(total_cp_formular)
+            new_cols.append("total_cost_price")
+            total_cp = True
+    if not total_sp :
+        df,total_sp_formular = cal_total_selling_price(df,mapper)
+        if total_sp:
+            derivatives.append(total_sp_formular)
+            new_cols.append("total_selling_price")
+            total_sp = True
     df,delivery_profit_formular = cal_delivery_profit(df,mapper)
     if delivery_profit_formular:
        derivatives.append(delivery_profit_formular)
        new_cols.append("delivery_profit")
-    if total_cp_formular:
+    if total_cp:
         df,total_gcp_formular = cal_gross_cost_price(df,mapper,multiple_features)
         if total_gcp_formular:
             derivatives.append(total_gcp_formular)
             new_cols.append("gross_cost_price")
-        if total_gcp_formular and total_sp_formular and delivery_profit_formular:
+        if total_gcp_formular and total_sp and delivery_profit_formular:
             df["profit"] = df["total_selling_price"] - df["gross_cost_price"] + df["delivery_profit"]
             df['returns(%)'] = (( df["profit"].values/df["gross_cost_price"].values) * 100).round(2)
             formular = "We got profit by substracting (gross_cost_price + delivery_profit) from total_selling_price \
                 then derived returns(%) by multipying (profit/gross_cost_price) by 100"
             derivatives.append(formular)
             new_cols += ["profit","returns(%)"]
-        elif total_gcp_formular and total_sp_formular:
+        elif total_gcp_formular and total_sp:
             df["profit"] = df["total_selling_price"] - df["gross_cost_price"]
             df['returns(%)'] = ((df["profit"].values / df["gross_cost_price"].values ) * 100).round(2)
             formular = "We got profit by substracting gross_cost_price  from total_selling_price \
                 then derived returns(%) by multipying (profit/gross_cost_price) by 100"
             derivatives.append(formular)
             new_cols += ["profit","returns(%)"]
-        elif total_cp_formular and total_sp_formular and delivery_profit_formular:
+        elif total_cp and total_sp and delivery_profit_formular:
             df["profit"] = df["total_selling_price"] - df["total_cost_price"] + df["delivery_profit"]
             df['returns(%)'] = (( df["profit"].values / df["total_cost_price"].values) * 100).round(2)
             formular = "We got profit by substracting (total_cost_price + delivery_profit) from total_selling_price \
                 then derived returns(%) by multipying (profit/total_cost_price) by 100"
             derivatives.append(formular)
             new_cols += ["profit","returns(%)"]
-        elif total_cp_formular and total_sp_formular:
+        elif total_cp and total_sp:
             df["profit"] = df["total_selling_price"] - df["total_cost_price"]
             df['returns(%)'] = ((df["profit"].values / df["total_cost_price"].values ) * 100).round(2)
             formular = "We got profit by substracting total_cost_price from total_selling_price \

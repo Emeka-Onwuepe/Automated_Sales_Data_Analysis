@@ -11,7 +11,8 @@ from django.utils import timezone
 from data_sets.models import Dataset
 from source_code.converter import  convert_to_excel
 from source_code.clean.general import (DATA_TYPE_SETTER, clean_df, create_mapper, 
-                                       get_null_table, set_data_types,handle_outliers)
+                                       get_null_table, set_data_types,handle_outliers,
+                                       rename_cols)
 from source_code.clean.identifiers import name_issues,get_name_issues
 from source_code.report import create_report_pdf
 from source_code.sub_classes import SUB_CLASSES, SUB_CLASSES_EXP
@@ -75,7 +76,8 @@ def AnalysisView(request,dataset_id):
         
         null_table,affected_nulls = get_null_table(df)
         df,null_report,outliers_report = clean_df(df,mapper,multiple_features)
-        df,derivatives,new_cols = cal_profit(df,mapper,multiple_features)
+        df,rename_msg,total_cp,total_sp = rename_cols(df,mapper)
+        df,derivatives,new_cols = cal_profit(df,mapper,multiple_features,total_cp,total_sp)
         for col in new_cols:
             df,outliers_report = handle_outliers(df,df[col],col,outliers_report)
         name_errors = name_issues(df,mapper,multiple_features,get_name_issues)
@@ -100,7 +102,7 @@ def AnalysisView(request,dataset_id):
         gc.collect() 
         create_cleaning_pdf(df,error_mgs,null_report,num_ranges,null_table,
                             null_table_cleaned,name_errors,dataset_location,
-                            derivatives,shape
+                            derivatives,shape,rename_msg
                             )
         
         create_report_pdf(df,dataset.report_title,dataset_location,
