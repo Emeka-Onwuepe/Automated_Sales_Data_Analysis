@@ -5,13 +5,13 @@ from re import search
 def clean_identifiers(indentifier):
     indentifier = indentifier.fillna(nan)
     indentifier =  indentifier.astype('str')
-    indentifier = indentifier.apply(lambda data:data.strip().lower())
+    indentifier = indentifier.apply(lambda data:' '.join(data.split()).lower())
     indentifier = indentifier.replace("nan",nan)
     return indentifier
 
 def clean_genders (gender_col):
     gender_col =  gender_col.astype('str')
-    gender_col = gender_col.apply(lambda data:data.strip().lower())
+    gender_col = gender_col.apply(lambda data:' '.join(data.split()).lower())
     conditions_list = [(gender_col == 'female') | (gender_col == 'f')|
                        (gender_col == 'fmale'), (gender_col == 'male') |
                        (gender_col == 'm'), gender_col == 'prefer not to say']
