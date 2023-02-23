@@ -7,7 +7,7 @@ introduction_p1 = "This report/analysis tries to examine the general progress of
     a balance patronage. Please note that this unique values distributions might not equal purchasing power."
 
 introduction_p2 = "Second, this report examines daily avaerage sales(qty) and monthly total sales(qty) of values product categories,\
-    sales groupings, product names and customers' groupings. The number of product types or brands which can be classified under product category \
+    sales groupings, and product names. The number of product types or brands which can be classified under product category \
     can range from one to infinity which might be difficult to visualize, thus  product categories, sales groupings, product names or customers' \
     groupings that has more than six(6) unique features will be splited into multiple graphs. Each graph wheather on average daily sales or \
     monthly total sales will represent information on either six or less than six product types or brand when analyzing a product brand feature \

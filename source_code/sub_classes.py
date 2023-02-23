@@ -21,7 +21,7 @@ CRITICAL = ["unit_cp","sp","discount_per","discount_amount","qty_sold",
 # CAT_UNIVARIATS = ['gender',"p_cat","sales_grouping",'payment_status','delivered',
 #                   "del_location","c_grouping",'c_region']
 
-TIME_SEERIES_VAL = ['p_cat','sales_grouping','p_name','c_grouping']
+TIME_SEERIES_VAL = ['p_cat','sales_grouping','p_name']
 PRODUCT_VAL = ['p_cat','p_name']
 
 SUB_CLASSES_EXP =  {"Select the appropriate label":"Kindly leave any unnecessary column/feature unselected \
