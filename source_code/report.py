@@ -6,7 +6,7 @@ from source_code.converter import  landscape_template,fig2image,list_to_string,d
 from source_code.insights.time_series import plot_time_series,average_sales
 from source_code.insights.univariats_plot_funcs import feature_uniques_percentage,plot_graph
 from source_code.insights.plot_returns import average_returns,plot_average_returns
-from source_code.introduction import introduction_p1, introduction_p2, introduction_p3
+from source_code.introduction import introduction_p1, introduction_p2, introduction_p3,introduction_p4
 from source_code.sub_classes import TIME_SEERIES_VAL,PRODUCT_VAL
 from source_code.insights.interpretation import time_series_insights
 from matplotlib.pylab import close
@@ -49,6 +49,7 @@ def create_report_pdf(df,report_heading,dataset_location,
     story.append(Paragraph(introduction_p1,p_style))
     story.append(Paragraph(introduction_p2,p_style))
     story.append(Paragraph(introduction_p3,p_style))
+    story.append(Paragraph(introduction_p4,p_style))
 
     for col in cat_features.columns: 
         data_dic,info_df = feature_uniques_percentage(cat_features,col)
