@@ -9,7 +9,6 @@ def plot_time_series(data,feature,count,pngs_location,period = "d"):
     
     labels = None
     xticks = None
-    info_df = None
     xlabel = "Days" if period == "d" else "Months"
     
     
@@ -22,14 +21,15 @@ def plot_time_series(data,feature,count,pngs_location,period = "d"):
         labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',"Aug","Sep","Oct","Nov","Dec"]
         xticks = [0,1,2,3,4,5,6,7,8,9,10,11]
         title = f'monthly total quantity sold ({feature}) '
-        ylabel = f'Total Count'
+        ylabel = f'Quantity'
        
     # base_color = color_palette()[0]
     # plt.figure(figsize = [16,5])
     
     fig,ax = plt.subplots(dpi=300,figsize = [12, 5])
     plt.subplots_adjust(bottom=0.30)
-    data.plot(marker="P",ax=ax);
+    # data.plot(marker="P",alpha=0.5,ax=ax);
+    data.plot.bar(ax=ax)
     plt.xticks(xticks,labels=labels);
     # fig.canvas.draw()
     
@@ -47,18 +47,19 @@ def plot_time_series(data,feature,count,pngs_location,period = "d"):
     file_location = path.join(pngs_location,f'{label}.png')
     
     plt.savefig(file_location)
-    return fig,info_df
+    return fig
 
 def average_sales(df,sales_date,feature,mapper,period):
     maximium = 6
     data_list = []
+    info_df = None
     data = None
     if period == "d":
         data = df.groupby([df[sales_date].dt.dayofweek,feature])[mapper['qty_sold']].median().unstack()
     elif period == "m":
         data = df.groupby([df[sales_date].dt.month,feature])[mapper['qty_sold']].sum().unstack()
     data.fillna(0,inplace = True)
-    
+    # info_df = time_series_insights(data,period,feature)
     if data.shape[1] > maximium:
         length = data.shape[1]
         split_into = length // maximium
@@ -72,8 +73,8 @@ def average_sales(df,sales_date,feature,mapper,period):
             else:
                 data_list.append(data.iloc[:,start:end])
                 start,end = end,end+maximium
-        del data,start,end
+        del start,end
     else:
         data_list.append(data)
 
-    return data_list
+    return data_list,data

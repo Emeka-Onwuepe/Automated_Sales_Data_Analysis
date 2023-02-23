@@ -90,6 +90,7 @@ def df2table(df,p_style=p_style2):
 def list_to_string(arr):
   is_plural = True
   string = None
+  arr = list(arr)
   length = len(arr)
   if length < 2:
     is_plural = False

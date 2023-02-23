@@ -106,16 +106,18 @@ def cal_profit(df,mapper,multiple_features,total_cp,total_sp):
     new_cols = []
     if not total_cp :
         df,total_cp_formular = cal_total_cost_price(df,mapper)
+        total_cp = True if total_cp_formular else False
         if total_cp:
             derivatives.append(total_cp_formular)
             new_cols.append("total_cost_price")
-            total_cp = True
+            
     if not total_sp :
         df,total_sp_formular = cal_total_selling_price(df,mapper)
+        total_cp = True if total_cp_formular else False
         if total_sp:
             derivatives.append(total_sp_formular)
             new_cols.append("total_selling_price")
-            total_sp = True
+
     df,delivery_profit_formular = cal_delivery_profit(df,mapper)
     if delivery_profit_formular:
        derivatives.append(delivery_profit_formular)

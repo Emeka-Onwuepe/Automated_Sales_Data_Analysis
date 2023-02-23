@@ -82,10 +82,8 @@ def feature_uniques_percentage(df,feature_name,graph=None,ylim= True,
     
     feature_df["count"] = feature_df[feature_name]
     feature_df[feature_name] = cal_percentage(feature_df[feature_name])
-    
-    info_df = feature_df.apply(lambda row:   f" {row.name} had {row['count']} counts which represents " + 
-                       f'{row[feature_name]}%.', axis=1)
-    
+    info_df = feature_df.apply(lambda row:   f" {row.name} had {int(row['count'])} count which represents " + 
+                       f'{row[feature_name]}% ', axis=1)
     feature_df.drop("count",inplace=True,axis=1)    
 
     title = f"unique values percentages of {feature_name} feature " 

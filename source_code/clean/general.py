@@ -190,14 +190,14 @@ def rename_cols(df,mapper):
     total_cp = False
     total_sp = False
     try:
-        df.rename(columns = {mapper["total_cp"]:"total_cost_price"},inplace=True,error="ignore")
+        df.rename(columns = {mapper["total_cp"]:"total_cost_price"},inplace=True)
         rename_msg.append(f"We renamed {mapper['total_cp']} to total_cost_price ")
         mapper["total_cp"] = "total_cost_price"
         total_cp = True
     except KeyError:
         pass
     try:
-        df.rename(columns = {mapper["total_sp"]:"total_selling_price"},inplace=True,error="ignore")
+        df.rename(columns = {mapper["total_sp"]:"total_selling_price"},inplace=True)
         rename_msg.append(f"We renamed {mapper['total_sp']} to total_selling_price ")
         mapper["total_sp"] = "total_selling_price"
         total_sp = True

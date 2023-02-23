@@ -3,10 +3,10 @@ use("Agg")
 import matplotlib.pylab as plt
 from numpy import array_split
 from os import path
+from .interpretation import returns_insights
 
 def plot_average_returns(data,feature,count,pngs_location):
     
-    info_df = None
     ylabel = "Percentage"
     xlabel = feature
     title = f"{feature} Average Returns(%) "
@@ -33,15 +33,15 @@ def plot_average_returns(data,feature,count,pngs_location):
     
     plt.savefig(file_location)
     # print(label)
-    return fig,info_df
+    return fig
 
 def average_returns(df,feature):
     maximium = 16
     data_list = []
-    
+    info_df = None
     data = df.groupby(feature)["returns(%)"].mean().sort_values()
     data.fillna(0,inplace = True)
-
+    info_df = returns_insights(data)
     if data.size > maximium:
         length = data.size
         split_into = length // maximium
@@ -52,4 +52,4 @@ def average_returns(df,feature):
     else:
         data_list.append(data)
     
-    return data_list
+    return data_list,info_df

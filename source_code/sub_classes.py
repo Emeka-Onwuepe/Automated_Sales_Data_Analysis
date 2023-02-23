@@ -22,7 +22,7 @@ CRITICAL = ["unit_cp","sp","discount_per","discount_amount","qty_sold",
 #                   "del_location","c_grouping",'c_region']
 
 TIME_SEERIES_VAL = ['p_cat','sales_grouping','p_name','c_grouping']
-PRODUCT_VAL = ['p_cat','p_name','p_id']
+PRODUCT_VAL = ['p_cat','p_name']
 
 SUB_CLASSES_EXP =  {"Select the appropriate label":"Kindly leave any unnecessary column/feature unselected \
                          or select not found",
@@ -39,7 +39,7 @@ SUB_CLASSES_EXP =  {"Select the appropriate label":"Kindly leave any unnecessary
                     'Unit Cost Price':'Represents the product/service cost price per unit.Not advisable to be \
                          selected more than once.',
                     "Extra Cost":"Represents any other cost incured apart from \
-                         the unit cost price. This can be selected multiple times. ",
+                         the unit cost price eg tax. This can be selected multiple times. ",
                     "Extra Cost Per Unit":"Represents any other cost incured apart from \
                          the unit cost price that is recorded per unit. This will be multiplied with quantity sold \
                               during calculation. This can be selected multiple times.",
