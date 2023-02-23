@@ -131,10 +131,7 @@ def create_report_pdf(df,report_heading,dataset_location,
     ### Sales Return                         
     try:
         if df["returns(%)"].mean() > 0:
-            story.append(Paragraph('Average Sales Returns Graphs',heading2))
-            content = "This shows the average percentage of profits to investement on products. For Example 10% averages shows that \
-                the product on average has yeilded 10% of the cost price or gross cost price as profit "
-            story.append(Paragraph(content,p_style))
+            add_description = True
             
             for item in PRODUCT_VAL:
                 data_list = None
@@ -146,6 +143,12 @@ def create_report_pdf(df,report_heading,dataset_location,
                 
                 if data_list:
                     story.append(PageBreak())
+                    if add_description:
+                        story.append(Paragraph('Average Sales Returns Graphs',heading2))
+                        content = "This shows the average percentage of profits to investement on products. For Example 10% averages shows that \
+                            the product on average has yeilded 10% of the cost price or gross cost price as profit "
+                        story.append(Paragraph(content,p_style))
+                        add_description = False
                     story.append(Paragraph(mapper[item],heading3))
                     story.append(Paragraph(info_df,p_style)) 
                     for count,data in enumerate(data_list):
