@@ -5,22 +5,23 @@ import matplotlib.pylab as plt
 from numpy import array_split
 
 
-def plot_time_series(data,feature,count,pngs_location,period = "d"):
+def plot_time_series(data,feature,count,pngs_location,item,period = "d"):
     
     labels = None
     xticks = None
     xlabel = "Days" if period == "d" else "Months"
+    sales_grouping = True if item == "sales_grouping" else False
     
     
     if period == "d":
         labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         xticks = [0,1,2,3,4,5,6]
-        title = f'Daily average quantity sold ({feature}) '
+        title = f'Daily average quantity {"contributed" if sales_grouping else"sold"} ({feature}) '
         ylabel = f'Average Count'
     elif period == 'm':
         labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',"Aug","Sep","Oct","Nov","Dec"]
         xticks = [0,1,2,3,4,5,6,7,8,9,10,11]
-        title = f'monthly total quantity sold ({feature}) '
+        title = f'monthly total quantity {"contributed" if sales_grouping else"sold"} ({feature}) '
         ylabel = f'Quantity'
        
     # base_color = color_palette()[0]

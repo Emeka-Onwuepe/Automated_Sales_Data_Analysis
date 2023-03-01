@@ -8,34 +8,37 @@
 
 {% if dataset %}
 <p>Please note that every data not deleted within 3hrs will be automatically deleted</p>
-<table>
-    <thead>
-        <tr>
-            <th>Date Created</th>
-            <th>Dataset</th>
-            <th>Original Data</th>
-            <th>Report</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for data in dataset %}
-        <tr>
-            <td>{{data.created}}</td>
-            <td>{{data.dataset}}</td>
-            <td><a href="{{data.dataset.url}}">Download</a></td>
-            {% if data.zipfolder %}
-            <td><a href="{{data.zipfolder.url}}">Download</a></td>
-            {% else %}
-            <td>Not completed</td>
-            {% endif %}
-            <td>
-                <a onclick="return confirm('Are You sure you want to delete')" href="{% url 'process:deleteview' data.id %}">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
+<div class="tableDiv" style="overflow-x: scroll;width: 100%;">
+    <table>
+        <thead>
+            <tr>
+                <th>Date Created</th>
+                <th>Dataset</th>
+                <th>Original Data</th>
+                <th>Report</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in dataset %}
+            <tr>
+                <td>{{data.created}}</td>
+                <td>{{data.dataset}}</td>
+                <td><a href="{{data.dataset.url}}">Download</a></td>
+                {% if data.zipfolder %}
+                <td><a href="{{data.zipfolder.url}}">Download</a></td>
+                {% else %}
+                <td>Not completed</td>
+                {% endif %}
+                <td>
+                    <a onclick="return confirm('Are You sure you want to delete')" href="{% url 'process:deleteview' data.id %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+    
+        </tbody>
+    </table>   
+</div>
 
-    </tbody>
-</table>
 {% else %}
 <p>No report yet, please upload a dataset.</p>
 {% endif %} {% endblock main %}

@@ -113,7 +113,7 @@ def cal_profit(df,mapper,multiple_features,total_cp,total_sp):
             
     if not total_sp :
         df,total_sp_formular = cal_total_selling_price(df,mapper)
-        total_cp = True if total_cp_formular else False
+        total_sp = True if total_sp_formular else False
         if total_sp:
             derivatives.append(total_sp_formular)
             new_cols.append("total_selling_price")
@@ -155,6 +155,7 @@ def cal_profit(df,mapper,multiple_features,total_cp,total_sp):
                 then derived returns(%) by multipying (profit/total_cost_price) by 100"
             derivatives.append(formular)
             new_cols += ["profit","returns(%)"]
-            
+    total_sp = False
+    total_cp = False        
     return df,derivatives,new_cols     
    

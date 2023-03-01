@@ -2,7 +2,7 @@ SUB_CLASSES =  {'Stock Date':'stock_date','Sales Date':'sales_date',
                'Order ID':'order_id','Product ID':'p_id',
                'Quantity Sold':'qty_sold', "Payment Status":"payment_status",
                "Product Category":"p_cat",'Unit Cost Price':'unit_cp',
-               "Extra Cost":"extra_cost","Extra Cost Per Unit":"extra_cost_pu",'Selling Price':'sp', 
+               "Extra Cost":"extra_cost","Extra Cost Per Unit":"extra_cost_pu",'Unit Selling Price':'sp', 
                "Total Cost Price":"total_cp","Total Selling Price":"total_sp",
                "Discount Percent":"discount_per",
                "Discounted Amount":"discount_amount",
@@ -43,7 +43,7 @@ SUB_CLASSES_EXP =  {"Select the appropriate label":"Kindly leave any unnecessary
                     "Extra Cost Per Unit":"Represents any other cost incured apart from \
                          the unit cost price that is recorded per unit. This will be multiplied with quantity sold \
                               during calculation. This can be selected multiple times.",
-                    'Selling Price':'Represents selling price without discount, the actual selling price.\
+                    'Unit Selling Price':'Represents selling price without discount, the actual selling price.\
                      Should be seleted once.', 
                     "Total Cost Price":"Represents the total cost price if available else the system will calculate it. \
                     Should be selected only once",

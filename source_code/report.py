@@ -90,7 +90,7 @@ def create_report_pdf(df,report_heading,dataset_location,
                     if count>0:
                         story.append(PageBreak())
                         story.append(Paragraph(f'{mapper[item]} continues ({label_period})',heading3))
-                    fig = plot_time_series(data,mapper[item],count,pngs_location,period)
+                    fig = plot_time_series(data,mapper[item],count,pngs_location,item,period)
                     story.append(fig2image(fig))
                     close("all")
                     del fig
@@ -120,7 +120,7 @@ def create_report_pdf(df,report_heading,dataset_location,
                     if count>0:
                         story.append(PageBreak())
                         story.append(Paragraph(f'{mapper[item2]} continues ({label_period})',heading3))
-                    fig = plot_time_series(data,mapper[item2],count,pngs_location,period)
+                    fig = plot_time_series(data,mapper[item2],count,pngs_location,item,period)
                     story.append(fig2image(fig))
                     close("all")
                     del fig
@@ -146,7 +146,7 @@ def create_report_pdf(df,report_heading,dataset_location,
                     if add_description:
                         story.append(Paragraph('Average Sales Returns Graphs',heading2))
                         content = "This shows the average percentage of profits to investement on products. For Example 10% averages shows that \
-                            the product on average has yeilded 10% of the cost price or gross cost price as profit "
+                            the product on average has yielded 10% of the cost price or gross cost price as profit "
                         story.append(Paragraph(content,p_style))
                         add_description = False
                     story.append(Paragraph(mapper[item],heading3))
